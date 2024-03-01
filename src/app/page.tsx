@@ -1,34 +1,32 @@
-"use client"
-
+import AddTodoForm from "@/components/home/add-todo-form";
+import TodoItem from "@/components/home/todo-item";
 import Header from "@/components/layout/Header";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+import { Card } from "@/components/ui/card";
+import { getData } from "@/server/actions/todoActions";
 
-export default function Home() {
+export default async function Home() {
+  const todos = await getData()
+  console.log(todos)
   return (
     <>
       <Header />
       <main className="space-y-6 text-center">
-        <section className="space-y-2 mt-20">
+        <div className="space-y-2 mt-20">
           <p className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
             A generic template for Nextjs apps.
           </p>
           <p className="text-muted-foreground">I am trying to make a starter layout kind of thing for my Nextjs projects.</p>
-        </section>
-        <Button
-          variant="outline"
-          onClick={() =>
-            toast("Event has been created", {
-              description: "Sunday, December 03, 2023 at 9:00 AM",
-              action: {
-                label: "Undo",
-                onClick: () => console.log("Undo"),
-              },
-            })
-          }
-        >
-          Show Toast
-        </Button>
+        </div>
+        <div className="max-w-96 mx-auto px-2">
+          <Card className="p-4 space-y-4">
+            <AddTodoForm />
+            <ul className="space-y-2">
+              {todos.map((todo) => (
+                <TodoItem key={todo.id} id={todo.id} todo={todo.text} />
+              )) ?? <span>No items</span>}
+            </ul>
+          </Card>
+        </div>
       </main>
     </>
   );
