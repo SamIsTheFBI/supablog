@@ -4,7 +4,7 @@ import "@/styles/globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], adjustFontFallback: false });
 
 export const metadata: Metadata = {
   title: "Create Next App",

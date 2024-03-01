@@ -13,7 +13,7 @@ export default function Header() {
         <div className="flex items-center gap-6 justify-between">
           <Navbar />
           <Link
-            href="/auth/sign-in"
+            href="/sign-in"
             className="text-sm font-medium text-muted-foreground hover:text-foreground">
             Sign In
           </Link>
