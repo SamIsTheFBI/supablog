@@ -1,7 +1,7 @@
 "use client"
 
 import { useTheme } from "next-themes"
-import { IoSunnyOutline, IoMoonOutline } from "react-icons/io5";
+import { LuMoonStar, LuSun } from "react-icons/lu";
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
@@ -17,8 +17,8 @@ const ThemeDropdown = () => {
           size="icon"
           aria-label="Toggle theme"
         >
-          <IoSunnyOutline className="size-5 scale-100 transition-all dark:scale-0" />
-          <IoMoonOutline className="absolute size-5 scale-0 transition-all dark:scale-100" />
+          <LuSun className="size-5 scale-100 transition-all dark:scale-0" />
+          <LuMoonStar className="absolute size-5 scale-0 transition-all dark:scale-100" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Navbar from "./Navbar";
+import ThemeDropdown from "./ThemeDropdown";
 
 export default function Header() {
   return (
@@ -12,6 +13,7 @@ export default function Header() {
         </div>
         <div className="flex items-center gap-6 justify-between">
           <Navbar />
+          <ThemeDropdown />
           <Link
             href="/sign-in"
             className="text-sm font-medium text-muted-foreground hover:text-foreground">

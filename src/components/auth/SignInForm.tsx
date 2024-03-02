@@ -16,6 +16,9 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { useFormState } from "react-dom"
+import { signInAction } from "@/server/actions/authActions"
+import AuthFormError from "./AuthFormError"
 
 const formSchema = z.object({
   email: z.string().email({
@@ -27,6 +30,10 @@ const formSchema = z.object({
 })
 
 const SignInForm = () => {
+  const [state, formAction] = useFormState(signInAction, {
+    error: "",
+  })
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -36,7 +43,7 @@ const SignInForm = () => {
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+
   }
 
   return (
@@ -49,10 +56,10 @@ const SignInForm = () => {
           </CardDescription>
         </CardHeader>
         <div className="px-6 pb-4">
-          Socials
+          TODO: OAuth
         </div>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form action={formAction}>
             <CardContent className="grid gap-4">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
@@ -64,6 +71,7 @@ const SignInForm = () => {
                   </span>
                 </div>
               </div>
+              <AuthFormError state={state} />
               <FormField
                 control={form.control}
                 name="email"

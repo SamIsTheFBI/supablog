@@ -1,4 +1,5 @@
 import SignUpForm from "@/components/auth/SignUpForm";
+import ThemeDropdown from "@/components/layout/ThemeDropdown";
 import Link from "next/link";
 
 export default function SignUpPage() {
@@ -11,6 +12,7 @@ export default function SignUpPage() {
               <span className="inline-block font-bold">FBK.</span>
             </Link>
           </div>
+          <ThemeDropdown />
         </div>
       </header>
       <main className="flex space-y-6">

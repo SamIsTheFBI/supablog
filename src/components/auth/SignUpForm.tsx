@@ -16,6 +16,9 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import AuthFormError from "./AuthFormError"
+import { useFormState } from "react-dom"
+import { signUpAction } from "@/server/actions/authActions"
 
 const formSchema = z.object({
   name: z.string(),
@@ -31,6 +34,10 @@ const formSchema = z.object({
 
 
 const SignUpForm = () => {
+  const [state, formAction] = useFormState(signUpAction, {
+    error: "",
+  })
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -54,10 +61,10 @@ const SignUpForm = () => {
           </CardDescription>
         </CardHeader>
         <div className="px-6 pb-4">
-          Socials
+          TODO: OAuth
         </div>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form action={formAction}>
             <CardContent className="grid gap-4">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
@@ -69,6 +76,7 @@ const SignUpForm = () => {
                   </span>
                 </div>
               </div>
+              <AuthFormError state={state} />
               <FormField
                 control={form.control}
                 name="name"

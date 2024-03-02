@@ -6,7 +6,6 @@ import { getData } from "@/server/actions/todoActions";
 
 export default async function Home() {
   const todos = await getData()
-  console.log(todos)
   return (
     <>
       <Header />
@@ -15,7 +14,7 @@ export default async function Home() {
           <p className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
             A generic template for Nextjs apps.
           </p>
-          <p className="text-muted-foreground">I am trying to make a starter layout kind of thing for my Nextjs projects.</p>
+          <p className="text-muted-foreground">I am trying to build a starter layout kind of thing for my Nextjs projects.</p>
         </div>
         <div className="max-w-96 mx-auto px-2">
           <Card className="p-4 space-y-4">

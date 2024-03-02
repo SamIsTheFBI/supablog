@@ -1,4 +1,5 @@
 import SignInForm from "@/components/auth/SignInForm";
+import ThemeDropdown from "@/components/layout/ThemeDropdown";
 import Link from "next/link";
 
 export default function SignInPage() {
@@ -11,6 +12,7 @@ export default function SignInPage() {
               <span className="inline-block font-bold">FBK.</span>
             </Link>
           </div>
+          <ThemeDropdown />
         </div>
       </header>
       <main className="flex space-y-6">
