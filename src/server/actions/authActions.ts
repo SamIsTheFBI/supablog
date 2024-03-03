@@ -22,34 +22,30 @@ export async function signInAction(
 
   if (error !== null) return { error }
 
-  try {
-    const [existingUser] = await db
-      .select()
-      .from(users)
-      .where(eq(users.email, data.email.toLowerCase()))
+  const [existingUser] = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, data.email.toLowerCase()))
 
-    if (!existingUser) {
-      return {
-        error: "Incorrect credentials!",
-      }
+  if (!existingUser) {
+    return {
+      error: "Incorrect credentials!",
     }
-
-    const validPassword = await new Argon2id().verify(existingUser.hashedPassword, data.password)
-
-    if (!validPassword) {
-      return {
-        error: "Incorrect credentials!",
-      }
-    }
-
-    const session = await lucia.createSession(existingUser.id, {})
-    const sessionCookie = lucia.createSessionCookie(session.id)
-    setAuthCookie(sessionCookie)
-
-    return redirect("/dashboard")
-  } catch (e) {
-    return genericError
   }
+
+  const validPassword = await new Argon2id().verify(existingUser.hashedPassword, data.password)
+
+  if (!validPassword) {
+    return {
+      error: "Incorrect credentials!",
+    }
+  }
+
+  const session = await lucia.createSession(existingUser.id, {})
+  const sessionCookie = lucia.createSessionCookie(session.id)
+  setAuthCookie(sessionCookie)
+
+  return redirect("/dashboard")
 }
 
 export async function signUpAction(

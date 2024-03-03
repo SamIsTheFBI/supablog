@@ -75,6 +75,6 @@
   }
 
   ::selection, .text-selected {
-    @apply bg-secondary-foreground text-secondary
+    @apply bg-secondary text-secondary
   }
 }

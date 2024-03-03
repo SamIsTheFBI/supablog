@@ -9,8 +9,8 @@ export default async function Home() {
   return (
     <>
       <Header />
-      <main className="space-y-6 text-center">
-        <div className="space-y-2 mt-20">
+      <main className="space-y-6 text-center p-4">
+        <div className="space-y-2 mt-16">
           <p className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
             A generic template for Nextjs apps.
           </p>
