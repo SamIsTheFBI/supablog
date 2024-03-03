@@ -4,7 +4,7 @@ import { cookies } from 'next/headers'
 import { type Cookie } from 'lucia'
 
 import { validateRequest } from './lucia'
-import { UsernameAndPassword, authenticationSchema } from '../db/schema'
+import { UsernameAndPassword, authenticationSchema } from '../db/schema/auth'
 
 export type AuthSession = {
   session: {
@@ -38,8 +38,8 @@ export const checkAuth = async () => {
 export const genericError = { error: 'Error, please try again.' }
 
 export const setAuthCookie = (cookie: Cookie) => {
-  // cookies().set(cookie.name, cookie.value, cookie.attributes); // <- suggested approach from the docs, but does not work with `next build` locally
-  cookies().set(cookie);
+  cookies().set(cookie.name, cookie.value, cookie.attributes); // <- suggested approach from the docs, but does not work with `next build` locally
+  // cookies().set(cookie);
 }
 
 const getErrorMessage = (errors: any): string => {

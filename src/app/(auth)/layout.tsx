@@ -1,17 +1,13 @@
 import ThemeDropdown from "@/components/layout/ThemeDropdown";
 import Link from "next/link";
 
-import { getUserAuth } from "@/server/auth/utils";
-import { redirect } from "next/navigation"
+import { checkAuth } from "@/server/auth/utils";
 
 export default async function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getUserAuth();
-  if (!session?.session) redirect("/sign-in")
-  if (session?.session) redirect("/dashboard")
 
   return (
     <>

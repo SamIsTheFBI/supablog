@@ -21,7 +21,7 @@ export default async function Header() {
           {session?.session &&
             <Link
               href="/dashboard"
-              className="text-sm font-medium max-sm:hidden text-muted-foreground hover:text-foreground">
+              className="text-sm max-sm:hidden font-medium text-muted-foreground hover:text-foreground">
               DB
             </Link>
             ||

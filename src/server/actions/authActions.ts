@@ -1,13 +1,14 @@
 "use server"
 
 import { Argon2id } from "oslo/password"
-import { genericError, setAuthCookie, validateAuthFormData } from "../auth/utils";
+import { genericError, getUserAuth, setAuthCookie, validateAuthFormData } from "../auth/utils";
 import { lucia, validateRequest } from "../auth/lucia";
-import { users } from "../db/schema";
+import { updateUserSchema, users } from "../db/schema/auth";
 import { eq } from "drizzle-orm";
-import db from "../db";
+import { db } from "../db";
 import { redirect } from "next/navigation";
 import { generateId } from "lucia";
+import { revalidatePath } from "next/cache";
 
 interface ActionResult {
   error: string;
@@ -18,34 +19,37 @@ export async function signInAction(
   formData: FormData,
 ): Promise<ActionResult> {
   const { data, error } = validateAuthFormData(formData)
-  console.log(data)
 
   if (error !== null) return { error }
 
-  const [existingUser] = await db
-    .select()
-    .from(users)
-    .where(eq(users.email, data.email.toLowerCase()))
+  try {
+    const [existingUser] = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, data.email.toLowerCase()))
 
-  if (!existingUser) {
-    return {
-      error: "Incorrect credentials!",
+    if (!existingUser) {
+      return {
+        error: "Incorrect credentials!",
+      }
     }
-  }
 
-  const validPassword = await new Argon2id().verify(existingUser.hashedPassword, data.password)
+    const validPassword = await new Argon2id().verify(existingUser.hashedPassword, data.password)
 
-  if (!validPassword) {
-    return {
-      error: "Incorrect credentials!",
+    if (!validPassword) {
+      return {
+        error: "Incorrect credentials!",
+      }
     }
+
+    const session = await lucia.createSession(existingUser.id, {})
+    const sessionCookie = lucia.createSessionCookie(session.id)
+    setAuthCookie(sessionCookie)
+
+    return redirect("/dashboard")
+  } catch (e) {
+    throw e
   }
-
-  const session = await lucia.createSession(existingUser.id, {})
-  const sessionCookie = lucia.createSessionCookie(session.id)
-  setAuthCookie(sessionCookie)
-
-  return redirect("/dashboard")
 }
 
 export async function signUpAction(
@@ -75,4 +79,50 @@ export async function signUpAction(
   setAuthCookie(sessionCookie)
 
   return redirect("/dashboard")
+}
+
+export async function signOutAction(): Promise<ActionResult> {
+  const { session } = await validateRequest();
+  if (!session) {
+    return {
+      error: "Unauthorized",
+    };
+  }
+
+  await lucia.invalidateSession(session.id);
+
+  const sessionCookie = lucia.createBlankSessionCookie();
+  setAuthCookie(sessionCookie);
+  redirect("/sign-in");
+}
+
+export async function updateUser(
+  _: any,
+  formData: FormData,
+): Promise<ActionResult & { success?: boolean }> {
+  const { session } = await getUserAuth();
+  if (!session) return { error: "Unauthorised" };
+
+  const name = formData.get("name") ?? undefined;
+  const email = formData.get("email") ?? undefined;
+
+  const result = updateUserSchema.safeParse({ name, email });
+
+  if (!result.success) {
+    const error = result.error.flatten().fieldErrors;
+    if (error.name) return { error: "Invalid name - " + error.name[0] };
+    if (error.email) return { error: "Invalid email - " + error.email[0] };
+    return genericError;
+  }
+
+  try {
+    await db
+      .update(users)
+      .set({ ...result.data })
+      .where(eq(users.id, session.user.id));
+    revalidatePath("/account");
+    return { success: true, error: "" };
+  } catch (e) {
+    return genericError;
+  }
 }
