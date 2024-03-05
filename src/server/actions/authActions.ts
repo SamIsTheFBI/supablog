@@ -63,6 +63,15 @@ export async function signUpAction(
   const hashedPassword = await new Argon2id().hash(data.password)
   const userId = generateId(15)
 
+  const existingUser = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, data.email.toLowerCase()))
+
+  if (existingUser) {
+    return { error: "Email already in use!" }
+  }
+
   try {
     await db.insert(users).values({
       id: userId,

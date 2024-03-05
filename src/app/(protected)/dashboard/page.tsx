@@ -1,4 +1,6 @@
 import SignOutButton from "@/components/auth/SignOutButton"
+import Quill from "@/components/editor/quill"
+import Tiptap from "@/components/editor/tiptap"
 import { getUserAuth } from "@/server/auth/utils"
 
 export default async function DashboardPage() {
@@ -11,6 +13,12 @@ export default async function DashboardPage() {
           {JSON.stringify(session, null, 2)}
         </pre>
         <SignOutButton />
+        <article className="prose dark:prose-invert max-w-7xl">
+          <h2>Tiptap Editor</h2>
+          <div className="border px-4 py-2">
+            <Tiptap />
+          </div>
+        </article>
       </main>
     </>
   )

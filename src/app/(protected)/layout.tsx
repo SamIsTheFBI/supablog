@@ -1,3 +1,4 @@
+import ThemeDropdown from "@/components/layout/ThemeDropdown";
 import { checkAuth } from "@/server/auth/utils";
 import Link from "next/link";
 
@@ -17,6 +18,7 @@ export default async function AuthLayout({
               <span className="inline-block font-bold">FBK.</span>
             </Link>
           </div>
+          <ThemeDropdown />
         </div>
       </header>
       {children}
