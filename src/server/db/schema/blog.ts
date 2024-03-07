@@ -3,6 +3,7 @@ import { users } from "./auth";
 
 export const blogs = pgTable("blogs", {
   id: serial("id").primaryKey(),
+  coverImage: text("cover_image"),
   slug: text("slug").notNull().unique(),
   title: text("title").notNull(),
   description: text("description").notNull(),
@@ -12,3 +13,4 @@ export const blogs = pgTable("blogs", {
 })
 
 export type SelectBlogs = typeof blogs.$inferSelect
+export type InsertBlogs = typeof blogs.$inferInsert

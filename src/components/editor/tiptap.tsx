@@ -7,7 +7,6 @@ import Image from '@tiptap/extension-image'
 import { useState } from 'react';
 import Underline from '@tiptap/extension-underline'
 
-import { addTodo } from '@/server/actions/todoActions';
 import EditorMenu from './menu'
 
 import { z } from "zod"
@@ -26,15 +25,17 @@ import { Input } from "@/components/ui/input"
 import { Button } from '@/components/ui/button';
 import { Textarea } from '../ui/textarea'
 import { useFormStatus } from 'react-dom'
+import { publishAction } from '@/server/actions/blogActions'
+import { addTodo } from '@/server/actions/todoActions'
+import { AuthSession } from '@/server/auth/utils'
 
-export default function Tiptap() {
+export default function Tiptap(session: AuthSession) {
   const { pending } = useFormStatus();
 
   const formSchema = z.object({
     title: z.string().min(5),
     slug: z.string().min(5),
     description: z.string().min(5),
-    content: z.string().min(5),
   })
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -43,12 +44,25 @@ export default function Tiptap() {
       title: "",
       slug: "",
       description: "",
-      content: "",
     }
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+    () => new Promise(resolve => setTimeout(resolve, 5000))
+    const authorId = session.session?.user.id as string
+
+    const blogObj = {
+      title: values.title,
+      slug: values.slug,
+      description: values.description,
+      content: editorContent,
+      isDraft: false,
+      authorId: authorId,
+    }
+
+    console.log(blogObj)
+
+    publishAction(blogObj)
   }
 
   const [editorContent, setEditorContent] = useState("");
@@ -134,7 +148,7 @@ export default function Tiptap() {
 
           <EditorMenu editor={editor} />
           <EditorContent editor={editor} />
-          <Button disabled={pending} type="submit">
+          <Button disabled={pending || editorContent === '' || editorContent === '<p></p>'} type="submit">
             Submit
           </Button>
         </form>

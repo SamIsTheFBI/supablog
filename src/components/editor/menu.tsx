@@ -19,9 +19,9 @@ export default function EditorMenu({ editor }: { editor: Editor }) {
   }
 
   return (
-    <div className="flex items-center gap-x-3 gap-y-2 flex-wrap border-b pb-2">
-      <Button variant="ghost" onClick={addImage}><ImageIcon /></Button>
-      <Button
+    <div className="flex items-center gap-x-3 gap-y-2 flex-wrap border rounded-md shadow-sm pb-2">
+      <Button type="button" variant="ghost" onClick={addImage}><ImageIcon /></Button>
+      <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().toggleBold().run()}
         disabled={
@@ -35,7 +35,7 @@ export default function EditorMenu({ editor }: { editor: Editor }) {
       >
         <FontBoldIcon />
       </Button>
-      <Button
+      <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().toggleItalic().run()}
         disabled={
@@ -49,7 +49,7 @@ export default function EditorMenu({ editor }: { editor: Editor }) {
       >
         <FontItalicIcon />
       </Button>
-      <Button
+      <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().toggleStrike().run()}
         disabled={
@@ -63,89 +63,89 @@ export default function EditorMenu({ editor }: { editor: Editor }) {
       >
         <LuStrikethrough />
       </Button>
-      <Button
+      <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().toggleUnderline().run()}
         className={editor.isActive('underline') ? 'border border-secondary-foreground bg-secondary' : ''}
       >
         <UnderlineIcon />
       </Button>
-      <Button variant="ghost"
+      <Button type="button" variant="ghost"
         onClick={() => editor.chain().focus().unsetAllMarks().run()}
       >
         Normal
       </Button>
-      <Button
+      <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
         className={editor.isActive('heading', { level: 1 }) ? 'border border-secondary-foreground bg-secondary' : ''}
       >
         h1
       </Button>
-      <Button
+      <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
         className={editor.isActive('heading', { level: 2 }) ? 'border border-secondary-foreground bg-secondary' : ''}
       >
         h2
       </Button>
-      <Button
+      <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
         className={editor.isActive('heading', { level: 3 }) ? 'border border-secondary-foreground bg-secondary' : ''}
       >
         h3
       </Button>
-      <Button
+      <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
         className={editor.isActive('heading', { level: 4 }) ? 'border border-secondary-foreground bg-secondary' : ''}
       >
         h4
       </Button>
-      <Button
+      <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
         className={editor.isActive('heading', { level: 5 }) ? 'border border-secondary-foreground bg-secondary' : ''}
       >
         h5
       </Button>
-      <Button
+      <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
         className={editor.isActive('heading', { level: 6 }) ? 'border border-secondary-foreground bg-secondary' : ''}
       >
         h6
       </Button>
-      <Button
+      <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         className={editor.isActive('bulletList') ? 'border border-secondary-foreground bg-secondary' : ''}
       >
         <ListBulletIcon />
       </Button>
-      <Button
+      <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
         className={editor.isActive('orderedList') ? 'border border-secondary-foreground bg-secondary' : ''}
       >
         <LuListOrdered />
       </Button>
-      <Button
+      <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().toggleCodeBlock().run()}
         className={editor.isActive('codeBlock') ? 'border border-secondary-foreground bg-secondary' : ''}
       >
         <CodeIcon />
       </Button>
-      <Button
+      <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
         className={editor.isActive('blockquote') ? 'border border-secondary-foreground bg-secondary' : ''}
       >
         <QuoteIcon />
       </Button>
-      <Button
+      <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().undo().run()}
         disabled={
@@ -158,7 +158,7 @@ export default function EditorMenu({ editor }: { editor: Editor }) {
       >
         <LuUndo />
       </Button>
-      <Button
+      <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().redo().run()}
         disabled={
