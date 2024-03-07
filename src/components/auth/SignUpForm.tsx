@@ -17,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import AuthFormError from "./AuthFormError"
-import { useFormState } from "react-dom"
+import { useFormState, useFormStatus } from "react-dom"
 import { signUpAction } from "@/server/actions/authActions"
 
 const formSchema = z.object({
@@ -37,6 +37,8 @@ const SignUpForm = () => {
   const [state, formAction] = useFormState(signUpAction, {
     error: "",
   })
+
+  const { pending } = useFormStatus()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -118,7 +120,7 @@ const SignUpForm = () => {
               />
             </CardContent>
             <CardFooter>
-              <Button className="w-full">Create account</Button>
+              <Button disabled={pending} type="submit" className="w-full">Create account</Button>
             </CardFooter>
           </form>
         </Form>

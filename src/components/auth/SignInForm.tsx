@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { useFormState } from "react-dom"
+import { useFormState, useFormStatus } from "react-dom"
 import { signInAction } from "@/server/actions/authActions"
 import AuthFormError from "./AuthFormError"
 
@@ -34,6 +34,8 @@ const SignInForm = () => {
     error: "",
   })
 
+  const { pending } = useFormStatus()
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,10 +43,6 @@ const SignInForm = () => {
       password: "",
     },
   })
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-
-  }
 
   return (
     <div className="sm:min-w-96 max-w-xl">
@@ -100,7 +98,7 @@ const SignInForm = () => {
               />
             </CardContent>
             <CardFooter>
-              <Button className="w-full" type="submit">Continue</Button>
+              <Button disabled={pending} className="w-full" type="submit">Continue</Button>
             </CardFooter>
           </form>
         </Form>

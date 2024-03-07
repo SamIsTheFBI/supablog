@@ -8,7 +8,7 @@ export default function SignOutButton() {
   const { pending } = useFormStatus();
   return (
     <form action={signOutAction}>
-      <Button disabled={pending}>Sign Out</Button>
+      <Button variant="destructive" disabled={pending}>Sign Out</Button>
     </form>
   )
 }

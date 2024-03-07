@@ -18,7 +18,7 @@ export default async function DashboardPage() {
           <SignOutButton />
         </div>
         <div className="space-y-2">
-          <h1 className="text-2xl font-bold">Your Blogposts: </h1>
+          <h1 className="text-2xl font-bold">Your Posts: </h1>
           <ul className="list-disc list-inside">
             {data.map((item) => (
               <li key={item.id}>{item.title}</li>

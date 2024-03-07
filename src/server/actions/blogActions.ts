@@ -3,11 +3,13 @@
 import { desc, eq } from "drizzle-orm"
 import { db } from "../db"
 import { blogs, type InsertBlogs } from "../db/schema/blog"
+import { revalidatePath } from "next/cache"
 
 export async function publishAction(blogPost: InsertBlogs) {
   console.log("Publishing...")
   await db.insert(blogs).values(blogPost)
   console.log("Successful!")
+  revalidatePath("/")
 }
 
 export async function getAllPosts() {

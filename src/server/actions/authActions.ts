@@ -68,7 +68,7 @@ export async function signUpAction(
     .from(users)
     .where(eq(users.email, data.email.toLowerCase()))
 
-  if (existingUser) {
+  if (existingUser.length > 0) {
     return { error: "Email already in use!" }
   }
 
@@ -87,6 +87,7 @@ export async function signUpAction(
 
   setAuthCookie(sessionCookie)
 
+  console.log("Successfully created account!")
   return redirect("/dashboard")
 }
 

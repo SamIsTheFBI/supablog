@@ -19,7 +19,7 @@ export default function EditorMenu({ editor }: { editor: Editor }) {
   }
 
   return (
-    <div className="flex items-center gap-x-3 gap-y-2 flex-wrap border rounded-md shadow-sm pb-2">
+    <div className="flex items-center gap-x-3 gap-y-2 flex-wrap border-b shadow-sm p-2">
       <Button type="button" variant="ghost" onClick={addImage}><ImageIcon /></Button>
       <Button type="button"
         variant="ghost"

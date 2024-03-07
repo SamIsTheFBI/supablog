@@ -47,8 +47,18 @@ export default function Tiptap(session: AuthSession) {
     }
   })
 
+  function slugify(title: string) {
+    const slug = title
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/[\s_-]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+    console.log(slug)
+    form.setValue('slug', slug, { shouldValidate: true })
+  }
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    () => new Promise(resolve => setTimeout(resolve, 5000))
     const authorId = session.session?.user.id as string
 
     const blogObj = {
@@ -125,6 +135,7 @@ export default function Tiptap(session: AuthSession) {
                   <FormControl>
                     <Input placeholder="This will show in URL of your blog post" {...field} />
                   </FormControl>
+                  <Button type="button" onClick={() => slugify(form.getValues('title'))}>Generate Slug</Button>
                   <FormMessage />
                 </div>
               </FormItem>
@@ -146,8 +157,12 @@ export default function Tiptap(session: AuthSession) {
             )}
           />
 
-          <EditorMenu editor={editor} />
-          <EditorContent editor={editor} />
+          <div className="border rounded-md">
+            <EditorMenu editor={editor} />
+            <div className="px-4">
+              <EditorContent editor={editor} />
+            </div>
+          </div>
           <Button disabled={pending || editorContent === '' || editorContent === '<p></p>'} type="submit">
             Submit
           </Button>
