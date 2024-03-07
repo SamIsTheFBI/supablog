@@ -1,35 +1,56 @@
 'use client'
 
-import { useEditor, EditorContent } from '@tiptap/react'
+import { BubbleMenu, useEditor, EditorContent } from '@tiptap/react'
 import { Link as TipTapLink } from '@tiptap/extension-link'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
-import { ChangeEvent, useCallback, useState } from 'react';
-import { Button } from '../ui/button';
-import { CodeIcon, FontBoldIcon, FontItalicIcon, ImageIcon, ListBulletIcon, QuoteIcon, RulerSquareIcon, StrikethroughIcon, UnderlineIcon } from '@radix-ui/react-icons';
-import { LuListOrdered, LuRedo, LuStrikethrough, LuUndo } from 'react-icons/lu';
+import { useState } from 'react';
 import Underline from '@tiptap/extension-underline'
-import { RiChatNewLine, RiFontMono } from "react-icons/ri";
-import { VscNewline } from "react-icons/vsc";
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-
 
 import { addTodo } from '@/server/actions/todoActions';
+import EditorMenu from './menu'
+
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+
+import { useForm } from "react-hook-form"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Button } from '@/components/ui/button';
+import { Textarea } from '../ui/textarea'
+import { useFormStatus } from 'react-dom'
 
 export default function Tiptap() {
-  const [selectedHeading, setSelectedHeading] = useState('0');
+  const { pending } = useFormStatus();
+
+  const formSchema = z.object({
+    title: z.string().min(5),
+    slug: z.string().min(5),
+    description: z.string().min(5),
+    content: z.string().min(5),
+  })
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      title: "",
+      slug: "",
+      description: "",
+      content: "",
+    }
+  })
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values)
+  }
+
   const [editorContent, setEditorContent] = useState("");
   const editor = useEditor({
     extensions: [
@@ -41,20 +62,12 @@ export default function Tiptap() {
         autolink: true,
       })
     ],
-    content: 'Start writing here..',
+    content: '',
     onUpdate({ editor }) {
       setEditorContent(editor.getHTML());
       console.log(editorContent)
     },
   })
-
-  const addImage = useCallback(() => {
-    const url = window.prompt('URL')
-
-    if (url) {
-      editor?.chain().focus().setImage({ src: url }).run()
-    }
-  }, [editor])
 
   if (!editor) {
     return null
@@ -62,163 +75,70 @@ export default function Tiptap() {
 
   return (
     <>
-      <div className="flex items-center gap-x-3 gap-y-2 flex-wrap border-b pb-2">
-        <Button variant="ghost" onClick={addImage}><ImageIcon /></Button>
-        <Button
-          variant="ghost"
+      <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
+        <button
           onClick={() => editor.chain().focus().toggleBold().run()}
-          disabled={
-            !editor.can()
-              .chain()
-              .focus()
-              .toggleBold()
-              .run()
-          }
-          className={editor.isActive('bold') ? 'border border-secondary-foreground bg-secondary' : ''}
+          className={editor.isActive('bold') ? 'is-active' : ''}
         >
-          <FontBoldIcon />
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-          disabled={
-            !editor.can()
-              .chain()
-              .focus()
-              .toggleItalic()
-              .run()
-          }
-          className={editor.isActive('italic') ? 'border border-secondary-foreground bg-secondary' : ''}
-        >
-          <FontItalicIcon />
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().toggleStrike().run()}
-          disabled={
-            !editor.can()
-              .chain()
-              .focus()
-              .toggleStrike()
-              .run()
-          }
-          className={editor.isActive('strike') ? 'border border-secondary-foreground bg-secondary' : ''}
-        >
-          <LuStrikethrough />
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().toggleUnderline().run()}
-          className={editor.isActive('underline') ? 'border border-secondary-foreground bg-secondary' : ''}
-        >
-          <UnderlineIcon />
-        </Button>
-        <Button variant="ghost"
-          onClick={() => editor.chain().focus().unsetAllMarks().run()}
-        >
-          Normal
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-          className={editor.isActive('heading', { level: 1 }) ? 'border border-secondary-foreground bg-secondary' : ''}
-        >
-          h1
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          className={editor.isActive('heading', { level: 2 }) ? 'border border-secondary-foreground bg-secondary' : ''}
-        >
-          h2
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-          className={editor.isActive('heading', { level: 3 }) ? 'border border-secondary-foreground bg-secondary' : ''}
-        >
-          h3
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
-          className={editor.isActive('heading', { level: 4 }) ? 'border border-secondary-foreground bg-secondary' : ''}
-        >
-          h4
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
-          className={editor.isActive('heading', { level: 5 }) ? 'border border-secondary-foreground bg-secondary' : ''}
-        >
-          h5
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
-          className={editor.isActive('heading', { level: 6 }) ? 'border border-secondary-foreground bg-secondary' : ''}
-        >
-          h6
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={editor.isActive('bulletList') ? 'border border-secondary-foreground bg-secondary' : ''}
-        >
-          <ListBulletIcon />
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={editor.isActive('orderedList') ? 'border border-secondary-foreground bg-secondary' : ''}
-        >
-          <LuListOrdered />
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-          className={editor.isActive('codeBlock') ? 'border border-secondary-foreground bg-secondary' : ''}
-        >
-          <CodeIcon />
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          className={editor.isActive('blockquote') ? 'border border-secondary-foreground bg-secondary' : ''}
-        >
-          <QuoteIcon />
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().undo().run()}
-          disabled={
-            !editor.can()
-              .chain()
-              .focus()
-              .undo()
-              .run()
-          }
-        >
-          <LuUndo />
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => editor.chain().focus().redo().run()}
-          disabled={
-            !editor.can()
-              .chain()
-              .focus()
-              .redo()
-              .run()
-          }
-        >
-          <LuRedo />
-        </Button>
-      </div>
+          bold
+        </button>
+      </BubbleMenu>
 
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem className="flex items-baseline gap-x-3 justify-between">
+                <FormLabel>Title</FormLabel>
+                <div className="w-full space-y-1">
+                  <FormControl>
+                    <Input placeholder="Title of your blog post" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="slug"
+            render={({ field }) => (
+              <FormItem className="flex items-baseline gap-x-3 justify-between">
+                <FormLabel>Slug</FormLabel>
+                <div className="w-full space-y-1">
+                  <FormControl>
+                    <Input placeholder="This will show in URL of your blog post" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem className="flex items-baseline gap-x-3 justify-between">
+                <FormLabel>Description</FormLabel>
+                <div className="w-full space-y-1">
+                  <FormControl>
+                    <Textarea placeholder="A brief description of your blog post" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
 
-      <EditorContent editor={editor} />
-      <Button disabled={editorContent === ''} onClick={() => addTodo(editorContent)}>Submit</Button>
+          <EditorMenu editor={editor} />
+          <EditorContent editor={editor} />
+          <Button disabled={pending} type="submit">
+            Submit
+          </Button>
+        </form>
+      </Form>
     </>
   )
 }

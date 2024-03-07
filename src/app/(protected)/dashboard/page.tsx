@@ -13,7 +13,7 @@ export default async function DashboardPage() {
           {JSON.stringify(session, null, 2)}
         </pre>
         <SignOutButton />
-        <article className="prose dark:prose-invert max-w-7xl">
+        <article className="prose dark:prose-invert max-w-7xl  prose-img:ml-[auto] prose-img:mr-[auto]">
           <h2>Tiptap Editor</h2>
           <div className="border px-4 py-2">
             <Tiptap />
