@@ -1,8 +1,9 @@
 import SignOutButton from "@/components/auth/SignOutButton"
-import Quill from "@/components/editor/quill"
-import Tiptap from "@/components/editor/tiptap"
+import BlogListItem from "@/components/dashboard/blog-list-item"
+import { Button } from "@/components/ui/button"
 import { getPostsByUserId } from "@/server/actions/blogActions"
 import { getUserAuth } from "@/server/auth/utils"
+import Link from "next/link"
 
 export default async function DashboardPage() {
   const { session } = await getUserAuth()
@@ -18,19 +19,16 @@ export default async function DashboardPage() {
           <SignOutButton />
         </div>
         <div className="space-y-2">
-          <h1 className="text-2xl font-bold">Your Posts: </h1>
+          <div className="flex justify-between">
+            <h1 className="text-2xl font-bold">Your Posts: </h1>
+            <Button className="font-bold" asChild><Link href="/create-post">Create Post</Link></Button>
+          </div>
           <ul className="list-disc list-inside">
-            {data.map((item) => (
-              <li key={item.id}>{item.title}</li>
+            {data.map((post) => (
+              <li key={post.id}><BlogListItem post={post} /></li>
             ))}
           </ul>
         </div>
-        <article className="prose dark:prose-invert max-w-7xl  prose-img:ml-[auto] prose-img:mr-[auto] space-y-2">
-          <h2>Tiptap Editor</h2>
-          <div className="border px-4 py-2">
-            <Tiptap session={session} />
-          </div>
-        </article>
       </main>
     </>
   )

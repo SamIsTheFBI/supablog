@@ -1,7 +1,7 @@
 "use server"
 
 import { Argon2id } from "oslo/password"
-import { genericError, getUserAuth, setAuthCookie, validateAuthFormData } from "../auth/utils";
+import { genericError, getUserAuth, setAuthCookie, validateAuthFormData, validateSignInFormData } from "../auth/utils";
 import { lucia, validateRequest } from "../auth/lucia";
 import { updateUserSchema, users } from "../db/schema/auth";
 import { eq } from "drizzle-orm";
@@ -18,8 +18,14 @@ export async function signInAction(
   _: ActionResult,
   formData: FormData,
 ): Promise<ActionResult> {
-  const { data, error } = validateAuthFormData(formData)
+  const { data, error } = validateSignInFormData(formData)
+  console.log(data)
+  //
+  // console.log("KUCHH TOH GADHBADH H")
+  //
+  // console.log(formData)
 
+  // return { error: "Testing" }
   if (error !== null) return { error }
 
   try {
@@ -75,6 +81,7 @@ export async function signUpAction(
   try {
     await db.insert(users).values({
       id: userId,
+      name: data.name,
       email: data.email,
       hashedPassword,
     })

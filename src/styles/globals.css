@@ -87,4 +87,8 @@
     @apply prose dark:prose-invert
   }
 
+  .ProseMirror {
+    @apply min-h-screen
+  }
+
 }

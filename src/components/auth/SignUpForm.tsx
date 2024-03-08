@@ -49,10 +49,6 @@ const SignUpForm = () => {
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
-  }
-
   return (
     <div className="sm:min-w-96 max-w-xl">
       <Card className="max-sm:border-0 max-sm:shadow-none">
