@@ -27,7 +27,6 @@ import { Textarea } from '../ui/textarea'
 import { useFormStatus } from 'react-dom'
 import { publishAction } from '@/server/actions/blogActions'
 import { AuthSession } from '@/server/auth/utils'
-import { redirect } from 'next/navigation'
 import { toast } from 'sonner'
 
 export default function Tiptap(session: AuthSession) {

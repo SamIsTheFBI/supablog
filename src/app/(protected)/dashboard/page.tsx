@@ -23,7 +23,7 @@ export default async function DashboardPage() {
             <h1 className="text-2xl font-bold">Your Posts: </h1>
             <Button className="font-bold" asChild><Link href="/create-post">Create Post</Link></Button>
           </div>
-          <ul className="list-disc list-inside">
+          <ul className="space-y-2">
             {data.map((post) => (
               <li key={post.id}><BlogListItem post={post} /></li>
             ))}

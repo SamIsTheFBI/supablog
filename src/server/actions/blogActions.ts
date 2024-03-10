@@ -5,6 +5,7 @@ import { db } from "../db"
 import { blogs, type InsertBlogs } from "../db/schema/blog"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
+import { genericError } from "../auth/utils"
 
 interface ActionResult {
   error: string;
@@ -43,4 +44,17 @@ export async function getPostsByUserId(authorId: string) {
 export async function getPostBySlug(slug: string) {
   const data = await db.select().from(blogs).where(eq(blogs.slug, slug))
   return data
+}
+
+export async function deletePost(slug: string) {
+  try {
+    await db.delete(blogs).where(eq(blogs.slug, slug)).returning()
+  } catch (e) {
+    return genericError
+  }
+
+  // todo: please find out why removing redirect angers eslint in blog-list-item.tsx
+  // you don't understand useFormState i think
+  revalidatePath("/dashboard")
+  redirect("/dashboard")
 }
