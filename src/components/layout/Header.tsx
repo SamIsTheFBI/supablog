@@ -2,6 +2,7 @@ import Link from "next/link";
 import Navbar from "./Navbar";
 import { getUserAuth } from "@/server/auth/utils";
 import SheetMenu from "./sheet-menu";
+import ThemeDropdown from "./ThemeDropdown";
 
 export default async function Header() {
   const session = await getUserAuth()
@@ -18,6 +19,7 @@ export default async function Header() {
         </div>
         <div className="flex items-center justify-between gap-2">
           <SheetMenu />
+          <ThemeDropdown />
           {session?.session &&
             <Link
               href="/dashboard"
