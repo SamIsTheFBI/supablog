@@ -44,7 +44,7 @@ export default function BlogListItem({ post }: { post: SelectBlogs }) {
             <LuPencil />
           </Link>
           <Dialog>
-            <DialogTrigger className="p-2 hover:bg-secondary rounded-sm hover:text-destructive">
+            <DialogTrigger className="p-2 hover:bg-destructive rounded-sm hover:text-destructive-foreground">
               <AiOutlineDelete />
             </DialogTrigger>
             <DialogContent>
