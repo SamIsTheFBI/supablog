@@ -2,7 +2,7 @@ import Tiptap from "@/components/editor/tiptap";
 import { getUserAuth } from "@/server/auth/utils";
 
 export default async function CreatePost() {
-  const { session } = await getUserAuth()
+  const session = await getUserAuth()
   return (
     <>
       <main className="max-w-7xl mx-auto">
