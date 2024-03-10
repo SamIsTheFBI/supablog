@@ -19,13 +19,6 @@ export async function signInAction(
   formData: FormData,
 ): Promise<ActionResult> {
   const { data, error } = validateSignInFormData(formData)
-  console.log(data)
-  //
-  // console.log("KUCHH TOH GADHBADH H")
-  //
-  // console.log(formData)
-
-  // return { error: "Testing" }
   if (error !== null) return { error }
 
   try {

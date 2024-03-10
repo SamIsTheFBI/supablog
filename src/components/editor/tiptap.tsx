@@ -26,8 +26,9 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '../ui/textarea'
 import { useFormStatus } from 'react-dom'
 import { publishAction } from '@/server/actions/blogActions'
-import { addTodo } from '@/server/actions/todoActions'
 import { AuthSession } from '@/server/auth/utils'
+import { redirect } from 'next/navigation'
+import { toast } from 'sonner'
 
 export default function Tiptap(session: AuthSession) {
   const { pending } = useFormStatus();
@@ -54,11 +55,10 @@ export default function Tiptap(session: AuthSession) {
       .replace(/[^\w\s-]/g, '')
       .replace(/[\s_-]+/g, '-')
       .replace(/^-+|-+$/g, '');
-    console.log(slug)
     form.setValue('slug', slug, { shouldValidate: true })
   }
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     const authorId = session.session?.user.id as string
 
     const blogObj = {
@@ -70,9 +70,12 @@ export default function Tiptap(session: AuthSession) {
       authorId: authorId,
     }
 
-    console.log(blogObj)
-
-    publishAction(blogObj)
+    const error = await publishAction(blogObj)
+    if (error?.error) {
+      toast.error(error.error)
+    } else {
+      toast.success("Blog post published successfully!")
+    }
   }
 
   const [editorContent, setEditorContent] = useState("");
@@ -89,7 +92,6 @@ export default function Tiptap(session: AuthSession) {
     content: '',
     onUpdate({ editor }) {
       setEditorContent(editor.getHTML());
-      console.log(editorContent)
     },
   })
 
