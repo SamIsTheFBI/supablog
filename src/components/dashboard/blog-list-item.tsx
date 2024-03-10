@@ -39,13 +39,12 @@ export default function BlogListItem({ post }: { post: SelectBlogs }) {
     <>
       <div className="px-4 py-2 border rounded-sm flex justify-between items-center text-wrap gap-2">
         {post.title}
-        <div className="inline-flex items-center gap-4">
-          {state?.error}
-          <Link href="#">
+        <div className="inline-flex items-center">
+          <Link href={`/edit-post/${post.slug}`} className="p-2 hover:bg-secondary rounded-sm">
             <LuPencil />
           </Link>
           <Dialog>
-            <DialogTrigger>
+            <DialogTrigger className="p-2 hover:bg-secondary rounded-sm">
               <AiOutlineDelete />
             </DialogTrigger>
             <DialogContent>

@@ -28,8 +28,14 @@ import { useFormStatus } from 'react-dom'
 import { publishAction } from '@/server/actions/blogActions'
 import { AuthSession } from '@/server/auth/utils'
 import { toast } from 'sonner'
+import { InsertBlogs } from '@/server/db/schema/blog'
 
-export default function Tiptap(session: AuthSession) {
+export type EditorProps = {
+  session: AuthSession,
+  blogObj?: InsertBlogs,
+}
+
+export default function Tiptap({ session, blogObj }: EditorProps) {
   const { pending } = useFormStatus();
 
   const formSchema = z.object({
@@ -41,9 +47,9 @@ export default function Tiptap(session: AuthSession) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      slug: "",
-      description: "",
+      title: blogObj?.title || "",
+      slug: blogObj?.slug || "",
+      description: blogObj?.description || "",
     }
   })
 
@@ -88,7 +94,7 @@ export default function Tiptap(session: AuthSession) {
         autolink: true,
       })
     ],
-    content: '',
+    content: blogObj?.content || '',
     onUpdate({ editor }) {
       setEditorContent(editor.getHTML());
     },
