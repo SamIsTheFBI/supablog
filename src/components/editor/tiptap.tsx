@@ -14,6 +14,11 @@ import { zodResolver } from "@hookform/resolvers/zod"
 
 import { useForm } from "react-hook-form"
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import {
   Form,
   FormControl,
   FormField,
@@ -25,10 +30,11 @@ import { Input } from "@/components/ui/input"
 import { Button } from '@/components/ui/button';
 import { Textarea } from '../ui/textarea'
 import { useFormStatus } from 'react-dom'
-import { publishAction } from '@/server/actions/blogActions'
+import { publishAction, updatePost } from '@/server/actions/blogActions'
 import { AuthSession } from '@/server/auth/utils'
 import { toast } from 'sonner'
 import { InsertBlogs } from '@/server/db/schema/blog'
+import { LuLink } from 'react-icons/lu'
 
 export type EditorProps = {
   session: AuthSession,
@@ -37,6 +43,12 @@ export type EditorProps = {
 
 export default function Tiptap({ session, blogObj }: EditorProps) {
   const { pending } = useFormStatus();
+
+  console.log(blogObj)
+  let update = false
+  if (blogObj?.slug) {
+    update = true
+  }
 
   const formSchema = z.object({
     title: z.string().min(5),
@@ -75,9 +87,20 @@ export default function Tiptap({ session, blogObj }: EditorProps) {
       authorId: authorId,
     }
 
-    const error = await publishAction(blogObj)
+    let error
+    if (update) {
+      error = await updatePost(blogObj)
+    } else {
+      error = await publishAction(blogObj)
+    }
+
     if (error?.error) {
       toast.error(error.error)
+      return
+    }
+
+    if (update) {
+      toast.success("Blog post updated successfully!")
     } else {
       toast.success("Blog post published successfully!")
     }
@@ -107,12 +130,35 @@ export default function Tiptap({ session, blogObj }: EditorProps) {
   return (
     <>
       <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
-        <button
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          className={editor.isActive('bold') ? 'is-active' : ''}
-        >
-          bold
-        </button>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              type="button"
+              variant="secondary"
+            >
+              <LuLink />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent>
+            <div className="flex gap-x-2">
+              <Input
+                type="text"
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    editor
+                      .chain()
+                      .focus()
+                      .setLink({
+                        href: (event.target as HTMLInputElement).value,
+                        target: "_blank",
+                      })
+                      .run();
+                  }
+                }}
+              />
+            </div>
+          </PopoverContent>
+        </Popover>
       </BubbleMenu>
 
       <Form {...form}>
@@ -171,7 +217,7 @@ export default function Tiptap({ session, blogObj }: EditorProps) {
             </div>
           </div>
           <Button disabled={pending || editorContent === '' || editorContent === '<p></p>'} type="submit">
-            Submit
+            {update && 'Update' || 'Submit'}
           </Button>
         </form>
       </Form>

@@ -6,9 +6,17 @@ import { blogs, type InsertBlogs } from "../db/schema/blog"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { genericError } from "../auth/utils"
+import { users } from "../db/schema/auth"
 
 interface ActionResult {
   error: string;
+}
+
+export async function updatePost(blogPost: InsertBlogs): Promise<ActionResult> {
+  let { slug, ...notSlug } = blogPost
+  await db.update(blogs).set(notSlug).where(eq(blogs.slug, slug))
+  revalidatePath("/dashboard")
+  redirect("/dashboard")
 }
 
 export async function publishAction(blogPost: InsertBlogs): Promise<ActionResult> {
@@ -57,4 +65,9 @@ export async function deletePost(slug: string) {
   // you don't understand useFormState i think
   revalidatePath("/dashboard")
   redirect("/dashboard")
+}
+
+export async function getUserById(id: string) {
+  const author = await db.select().from(users).where(eq(users.id, id))
+  return author[0].name
 }

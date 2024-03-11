@@ -18,8 +18,9 @@ export default async function Header() {
           <Navbar />
         </div>
         <div className="flex items-center justify-between gap-2">
-          <SheetMenu />
-          <ThemeDropdown />
+          <div className="max-sm:hidden">
+            <ThemeDropdown />
+          </div>
           {session?.session &&
             <Link
               href="/dashboard"
@@ -33,6 +34,7 @@ export default async function Header() {
               Sign In
             </Link>
           }
+          <SheetMenu />
         </div>
       </div>
     </header>
