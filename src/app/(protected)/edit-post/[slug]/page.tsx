@@ -5,6 +5,27 @@ import { getUserAuth } from "@/server/auth/utils";
 export default async function EditPost({ params }: { params: { slug: string } }) {
   const session = await getUserAuth()
   const blogObj = await getPostBySlug(params.slug)
+
+  if (!blogObj[0]) {
+    return (
+      <main className="flex">
+        <div className="m-auto">
+          404 not found
+        </div>
+      </main>
+    )
+  }
+
+  if (session.session?.user.id !== blogObj[0].authorId) {
+    return (
+      <main className="flex">
+        <div className="m-auto">
+          You're not authorised to edit this post!
+        </div>
+      </main>
+    )
+  }
+
   return (
     <>
       <main className="max-w-7xl mx-auto">

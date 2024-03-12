@@ -182,15 +182,17 @@ export default function Tiptap({ session, blogObj }: EditorProps) {
             control={form.control}
             name="slug"
             render={({ field }) => (
-              <FormItem className="flex items-baseline gap-x-3 justify-between">
-                <FormLabel>Slug</FormLabel>
-                <div className="w-full space-y-1">
-                  <FormControl>
-                    <Input placeholder="This will show in URL of your blog post" {...field} />
-                  </FormControl>
-                  <Button type="button" onClick={() => slugify(form.getValues('title'))}>Generate Slug</Button>
-                  <FormMessage />
+              <FormItem>
+                <div className="flex items-baseline gap-x-3 justify-between">
+                  <FormLabel>Slug</FormLabel>
+                  <div className="flex gap-2 w-full">
+                    <FormControl>
+                      <Input placeholder="This will show in URL of your blog post" {...field} />
+                    </FormControl>
+                    <Button type="button" onClick={() => slugify(form.getValues('title'))}>Generate Slug</Button>
+                  </div>
                 </div>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -216,7 +218,17 @@ export default function Tiptap({ session, blogObj }: EditorProps) {
               <EditorContent editor={editor} />
             </div>
           </div>
-          <Button disabled={pending || editorContent === '' || editorContent === '<p></p>'} type="submit">
+          <Button
+            disabled={
+              pending
+              || !editor.can()
+                .chain()
+                .focus()
+                .undo()
+                .run()
+            }
+            type="submit"
+          >
             {update && 'Update' || 'Submit'}
           </Button>
         </form>
