@@ -1,4 +1,4 @@
-import { boolean, pgTable, serial, text } from "drizzle-orm/pg-core";
+import { boolean, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 import { users } from "./auth";
 
 export const blogs = pgTable("blogs", {
@@ -9,7 +9,9 @@ export const blogs = pgTable("blogs", {
   description: text("description").notNull(),
   content: text("content").notNull(),
   isDraft: boolean("is_draft").notNull(),
-  authorId: text("author_id").notNull().references(() => users.id)
+  authorId: text("author_id").notNull().references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
 
 export type SelectBlogs = typeof blogs.$inferSelect

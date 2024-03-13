@@ -18,8 +18,10 @@ export default async function Page({ params }: { params: { slug: string } }) {
           <div className="text-4xl font-bold">
             {blogData[0].title}
           </div>
-          <div className="italic">
-            By {authorName}
+          <div className="text-muted-foreground">
+            By {authorName} | {blogData[0].updatedAt.toLocaleString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })} {blogData[0].updatedAt.toString() !== blogData[0].createdAt.toString() && '(updated)'}
+          </div>
+          <div>
           </div>
         </div>
         <article className="prose dark:prose-invert mx-auto prose-img:ml-[auto] prose-img:mr-[auto] px-4">

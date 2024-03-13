@@ -82,7 +82,7 @@ export default function EditorMenu({ editor }: { editor: Editor }) {
         <PopoverTrigger asChild>
           <Button
             type="button"
-            variant="secondary"
+            variant="ghost"
           >
             <LuLink />
           </Button>

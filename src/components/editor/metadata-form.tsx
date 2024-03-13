@@ -22,6 +22,7 @@ import { toast } from "sonner";
 import { publishAction, updatePost } from "@/server/actions/blogActions";
 import { useEditorContentStore } from "@/store/editorContent";
 import { useSubmitToggleStore } from "@/store/canSubmit";
+import { Label } from "../ui/label";
 
 export type MetadataFormProps = {
   session: AuthSession,
@@ -77,9 +78,11 @@ export default function MetadataForm({ session, blogObj }: MetadataFormProps) {
 
     let error
     if (update) {
-      error = await updatePost(blogObj)
+      const actualBlogObj = { ...blogObj, updatedAt: new Date() }
+      error = await updatePost(actualBlogObj)
     } else {
-      error = await publishAction(blogObj)
+      const actualBlogObj = { ...blogObj, createdAt: new Date(), updatedAt: new Date() }
+      error = await publishAction(actualBlogObj)
     }
 
     if (error?.error) {
@@ -147,6 +150,15 @@ export default function MetadataForm({ session, blogObj }: MetadataFormProps) {
                 </FormItem>
               )}
             />
+            <FormItem className="flex items-baseline gap-x-3 justify-between">
+              <FormLabel>TODO: Cover Image</FormLabel>
+              <div className="space-y-1">
+                <FormControl>
+                  <Input id="picture" type="file" />
+                </FormControl>
+                <FormMessage />
+              </div>
+            </FormItem>
           </div>
           <div className="space-x-2">
             <Button disabled={pending || !canSubmit || editorContent === '' || editorContent === '<p></p>'} type="submit">

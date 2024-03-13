@@ -1,8 +1,8 @@
 import BlogCard from "@/components/blog/blog-card"
-import { getAllPosts } from "@/server/actions/blogActions"
+import { getPublishedPosts } from "@/server/actions/blogActions"
 
 export default async function Blog() {
-  const data = await getAllPosts()
+  const data = await getPublishedPosts()
   return (
     <>
       <main className="space-y-6 p-4 max-w-7xl mx-auto">

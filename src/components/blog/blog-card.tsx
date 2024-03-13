@@ -1,5 +1,6 @@
 import { SelectBlogs } from "@/server/db/schema/blog";
 import Link from "next/link";
+import { LuCalendar } from "react-icons/lu";
 
 export default function BlogCard({ post }: { post: SelectBlogs }) {
   return (
@@ -9,6 +10,10 @@ export default function BlogCard({ post }: { post: SelectBlogs }) {
           {post.title}
         </h1>
       </Link>
+      <span className="inline-flex items-start gap-x-1 text-sm text-muted-foreground">
+        <LuCalendar size={15} />
+        {post.createdAt.toLocaleString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}
+      </span>
       <p>
         {post.description}
       </p>

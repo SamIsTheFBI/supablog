@@ -39,13 +39,18 @@ export async function publishAction(blogPost: InsertBlogs): Promise<ActionResult
   redirect("/dashboard")
 }
 
+export async function getPublishedPosts() {
+  const data = await db.select().from(blogs).where(eq(blogs.isDraft, false)).orderBy(desc(blogs.createdAt))
+  return data
+}
+
 export async function getAllPosts() {
   const data = await db.select().from(blogs).orderBy(desc(blogs.id))
   return data
 }
 
 export async function getPostsByUserId(authorId: string) {
-  const data = await db.select().from(blogs).where(eq(blogs.authorId, authorId))
+  const data = await db.select().from(blogs).where(eq(blogs.authorId, authorId)).orderBy(desc(blogs.updatedAt))
   return data;
 }
 

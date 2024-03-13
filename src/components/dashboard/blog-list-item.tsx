@@ -36,11 +36,18 @@ export default function BlogListItem({ post }: { post: SelectBlogs }) {
   }
   return (
     <>
-      <div className="px-4 py-2 border rounded-sm flex justify-between items-center text-wrap gap-2">
-        {post.title}
+      <div className="px-4 py-2 border rounded-sm flex justify-between items-center text-wrap gap-2 hover:bg-secondary">
+        <div className="inline-flex justify-between items-center flex-grow mr-4 lg:mr-16">
+          <Link href={`/edit-post/${post.slug}`} className="hover:underline group underline-offset-2 inline-flex gap-x-2 items-center">
+            {post.title}
+            <span className="text-muted-foreground text-sm group-hover:flex hidden">
+              <LuPencil />
+            </span>
+          </Link>
+          <span className="text-muted-foreground text-sm">{post.createdAt.toString() === post.updatedAt.toString() && 'Created at ' || 'Last updated at '}{post.updatedAt.toLocaleString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
+        </div>
         <div className="inline-flex items-center">
           <Link href={`/edit-post/${post.slug}`} className="p-2 hover:bg-secondary rounded-sm">
-            <LuPencil />
           </Link>
           <Dialog>
             <DialogTrigger className="p-2 hover:bg-destructive rounded-sm hover:text-destructive-foreground">
