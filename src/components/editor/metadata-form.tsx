@@ -165,7 +165,7 @@ export default function MetadataForm({ session, blogObj }: MetadataFormProps) {
               {update && 'Update' || 'Submit'}
             </Button>
             <Button variant="secondary" disabled={pending || !canSubmit || editorContent === '' || editorContent === '<p></p>'} type="button">
-              Save as draft
+              TODO: Save as draft
             </Button>
           </div>
         </form>
