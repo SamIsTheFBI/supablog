@@ -4,6 +4,14 @@ import { Button } from "../ui/button";
 import { CodeIcon, FontBoldIcon, FontItalicIcon, ImageIcon, ListBulletIcon, QuoteIcon, UnderlineIcon } from "@radix-ui/react-icons";
 import { LuListOrdered, LuRedo, LuStrikethrough, LuUndo } from "react-icons/lu";
 
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { LuLink } from 'react-icons/lu'
+import { Input } from "@/components/ui/input"
+
 
 export default function EditorMenu({ editor }: { editor: Editor }) {
   const addImage = useCallback(() => {
@@ -19,7 +27,7 @@ export default function EditorMenu({ editor }: { editor: Editor }) {
   }
 
   return (
-    <div className="flex items-center gap-x-3 gap-y-2 flex-wrap border-b shadow-sm p-2 sticky top-12 bg-background z-50">
+    <div className="flex items-center gap-x-3 gap-y-2 flex-wrap border-b shadow-sm p-2 bg-background z-50">
       <Button type="button" variant="ghost" onClick={addImage}><ImageIcon /></Button>
       <Button type="button"
         variant="ghost"
@@ -70,6 +78,35 @@ export default function EditorMenu({ editor }: { editor: Editor }) {
       >
         <UnderlineIcon />
       </Button>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            type="button"
+            variant="secondary"
+          >
+            <LuLink />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent>
+          <div className="flex gap-x-2">
+            <Input
+              type="text"
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  editor
+                    .chain()
+                    .focus()
+                    .setLink({
+                      href: (event.target as HTMLInputElement).value,
+                      target: "_blank",
+                    })
+                    .run();
+                }
+              }}
+            />
+          </div>
+        </PopoverContent>
+      </Popover>
       <Button type="button" variant="ghost"
         onClick={() => editor.chain().focus().unsetAllMarks().run()}
       >

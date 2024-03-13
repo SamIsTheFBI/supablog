@@ -5,6 +5,23 @@
 .tiptap {
   border: 0px;
   outline: 0px;
+  height: 100%;
+}
+
+article > div {
+  /* height: 100%; */
+}
+
+:root {
+  --header-height: 48px;
+}
+
+.main-height {
+  min-height: calc(100dvh - var(--header-height));
+}
+
+.max-h-main {
+  max-height: calc(96dvh - var(--header-height));
 }
 
 @layer base {
@@ -82,13 +99,4 @@
   ::selection, .text-selected {
     @apply bg-secondary text-secondary
   }
-
-  .ql-editor, .ql-blank {
-    @apply prose dark:prose-invert
-  }
-
-  .ProseMirror {
-    @apply min-h-screen
-  }
-
 }
