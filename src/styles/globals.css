@@ -21,7 +21,7 @@ article > div {
 }
 
 .max-h-main {
-  max-height: calc(96dvh - var(--header-height));
+  max-height: calc(97dvh - var(--header-height));
 }
 
 @layer base {

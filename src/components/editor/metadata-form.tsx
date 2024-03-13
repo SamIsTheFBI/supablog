@@ -121,7 +121,7 @@ export default function MetadataForm({ session, blogObj }: MetadataFormProps) {
                 <FormItem>
                   <div className="flex items-baseline gap-x-3 justify-between">
                     <FormLabel>Slug</FormLabel>
-                    <div className="flex gap-2 w-full flex-wrap">
+                    <div className="flex gap-2 w-full max-sm:flex-wrap">
                       <FormControl>
                         <Input placeholder="This will show in URL of your blog post" {...field} />
                       </FormControl>
