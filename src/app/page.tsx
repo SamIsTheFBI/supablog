@@ -20,9 +20,9 @@ export default async function Home() {
           <Card className="p-4 space-y-4">
             <AddTodoForm />
             <ul className="space-y-2">
-              {todos.map((todo) => (
+              {todos.length > 0 && todos.map((todo) => (
                 <TodoItem key={todo.id} id={todo.id} todo={todo.text} />
-              )) ?? <span>No items</span>}
+              )) || <span>No items</span>}
             </ul>
           </Card>
         </div>

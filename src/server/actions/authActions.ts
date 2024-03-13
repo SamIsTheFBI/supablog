@@ -87,7 +87,6 @@ export async function signUpAction(
 
   setAuthCookie(sessionCookie)
 
-  console.log("Successfully created account!")
   return redirect("/dashboard")
 }
 

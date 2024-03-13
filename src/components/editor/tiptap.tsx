@@ -44,7 +44,6 @@ export type EditorProps = {
 export default function Tiptap({ session, blogObj }: EditorProps) {
   const { pending } = useFormStatus();
 
-  console.log(blogObj)
   let update = false
   if (blogObj?.slug) {
     update = true
@@ -185,7 +184,7 @@ export default function Tiptap({ session, blogObj }: EditorProps) {
               <FormItem>
                 <div className="flex items-baseline gap-x-3 justify-between">
                   <FormLabel>Slug</FormLabel>
-                  <div className="flex gap-2 w-full">
+                  <div className="flex gap-2 w-full max-sm:flex-wrap">
                     <FormControl>
                       <Input placeholder="This will show in URL of your blog post" {...field} />
                     </FormControl>

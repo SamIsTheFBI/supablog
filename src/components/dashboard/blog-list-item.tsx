@@ -27,7 +27,6 @@ export default function BlogListItem({ post }: { post: SelectBlogs }) {
   async function handleDeletePost(currentState: { error: string }, formData: FormData) {
     const slug = formData.get('slug') as string
     const error = await deletePost(slug)
-    console.log(error)
     if (error === undefined) {
       toast.success("Successfully deleted the post!")
     } else {
