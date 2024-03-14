@@ -23,6 +23,9 @@ import { publishAction, updatePost } from "@/server/actions/blogActions";
 import { useEditorContentStore } from "@/store/editorContent";
 import { useSubmitToggleStore } from "@/store/canSubmit";
 import { Label } from "../ui/label";
+import { UploadButton } from "./uploadthing";
+import Image from "next/image";
+import { useState } from "react";
 
 export type MetadataFormProps = {
   session: AuthSession,
@@ -74,6 +77,7 @@ export default function MetadataForm({ session, blogObj }: MetadataFormProps) {
       content: editorContent,
       isDraft: false,
       authorId: authorId,
+      coverImage: imageUrl,
     }
 
     let error
@@ -96,6 +100,8 @@ export default function MetadataForm({ session, blogObj }: MetadataFormProps) {
       toast.success("Blog post published successfully!")
     }
   }
+
+  const [imageUrl, setImageUrl] = useState('')
 
   return (
     <>
@@ -150,15 +156,42 @@ export default function MetadataForm({ session, blogObj }: MetadataFormProps) {
                 </FormItem>
               )}
             />
-            <FormItem className="flex items-baseline gap-x-3 justify-between">
-              <FormLabel>TODO: Cover Image</FormLabel>
-              <div className="space-y-1">
-                <FormControl>
-                  <Input id="picture" type="file" />
-                </FormControl>
-                <FormMessage />
-              </div>
-            </FormItem>
+            <FormField
+              control={form.control}
+              name="description"
+              render={() => (
+                <FormItem className="flex items-baseline gap-x-3">
+                  <FormLabel>Cover Image</FormLabel>
+                  <FormControl>
+                    <UploadButton
+                      className="mt-4 ut-button:bg-primary ut-button:text-sm ut-button:ut-readying:bg-primary ut-button:ut-uploading:bg-primary"
+                      endpoint="imageUploader"
+                      onClientUploadComplete={(res) => {
+                        // Do something with the response
+                        console.log("Files: ", res);
+                        setImageUrl(res[0].url)
+                      }}
+                      onUploadError={(error: Error) => {
+                        // Do something with the error.
+                        alert(`ERROR! ${error.message}`);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex justify-center w-full gap-2">
+              {imageUrl !== '' &&
+                <Image
+                  src={imageUrl}
+                  alt="cover image"
+                  height={352}
+                  width={360}
+                  className="aspect-video h-56 p-2 bg-secondary rounded-md border object-cover"
+                />
+              }
+            </div>
           </div>
           <div className="space-x-2">
             <Button disabled={pending || !canSubmit || editorContent === '' || editorContent === '<p></p>'} type="submit">

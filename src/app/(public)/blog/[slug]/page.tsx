@@ -27,6 +27,9 @@ export default async function Page({ params }: { params: { slug: string } }) {
         <article className="prose dark:prose-invert mx-auto prose-img:ml-[auto] prose-img:mr-[auto] px-4">
           <div dangerouslySetInnerHTML={{ __html: blogContent }}></div>
         </article>
+        <div className="border-t mx-auto max-w-2xl py-6">
+          Share this:
+        </div>
       </main>
     </>
   )
