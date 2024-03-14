@@ -4,7 +4,7 @@ import "@/styles/globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/layout/theme-provider"
 
-const inter = Inter({ subsets: ["latin"], adjustFontFallback: true });
+const inter = Inter({ subsets: ["latin"], adjustFontFallback: false });
 
 export const metadata: Metadata = {
   title: "Create Next App",

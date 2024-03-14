@@ -101,7 +101,12 @@ export default function MetadataForm({ session, blogObj }: MetadataFormProps) {
     }
   }
 
-  const [imageUrl, setImageUrl] = useState('')
+  let coverImage: string = ''
+  if (blogObj?.coverImage !== null && blogObj?.coverImage !== undefined && blogObj?.coverImage !== '') {
+    coverImage = blogObj.coverImage
+  }
+
+  const [imageUrl, setImageUrl] = useState(coverImage)
 
   return (
     <>
@@ -168,7 +173,6 @@ export default function MetadataForm({ session, blogObj }: MetadataFormProps) {
                       endpoint="imageUploader"
                       onClientUploadComplete={(res) => {
                         // Do something with the response
-                        console.log("Files: ", res);
                         setImageUrl(res[0].url)
                       }}
                       onUploadError={(error: Error) => {
@@ -188,7 +192,7 @@ export default function MetadataForm({ session, blogObj }: MetadataFormProps) {
                   alt="cover image"
                   height={352}
                   width={360}
-                  className="aspect-video h-56 p-2 bg-secondary rounded-md border object-cover"
+                  className="aspect-video h-56 rounded-md border object-cover"
                 />
               }
             </div>
