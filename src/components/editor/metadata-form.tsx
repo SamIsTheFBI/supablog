@@ -1,5 +1,6 @@
 "use client"
 
+import { useDebounce } from "use-debounce"
 import {
   Form,
   FormControl,
@@ -25,7 +26,7 @@ import { useSubmitToggleStore } from "@/store/canSubmit";
 import { Label } from "../ui/label";
 import { UploadButton } from "./uploadthing";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export type MetadataFormProps = {
   session: AuthSession,
@@ -67,6 +68,36 @@ export default function MetadataForm({ session, blogObj }: MetadataFormProps) {
     update = true
   }
 
+  async function onDraft(values: z.infer<typeof formSchema>) {
+    const authorId = session.session?.user.id as string
+
+    const blogObj = {
+      title: values.title,
+      slug: values.slug,
+      description: values.description,
+      content: editorContent,
+      isDraft: true,
+      authorId: authorId,
+      coverImage: imageUrl,
+    }
+
+    let error
+    if (update) {
+      const actualBlogObj = { ...blogObj, updatedAt: new Date() }
+      error = await updatePost(actualBlogObj)
+    } else {
+      const actualBlogObj = { ...blogObj, createdAt: new Date(), updatedAt: new Date() }
+      error = await publishAction(actualBlogObj)
+    }
+
+    if (error?.error) {
+      toast.error(error.error)
+      return
+    }
+
+    toast.success("Blog post saved to draft successfully!")
+  }
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const authorId = session.session?.user.id as string
 
@@ -95,7 +126,7 @@ export default function MetadataForm({ session, blogObj }: MetadataFormProps) {
     }
 
     if (update) {
-      toast.success("Blog post updated successfully!")
+      toast.success("Blog post updated & published successfully!")
     } else {
       toast.success("Blog post published successfully!")
     }
@@ -169,7 +200,7 @@ export default function MetadataForm({ session, blogObj }: MetadataFormProps) {
                   <FormLabel>Cover Image</FormLabel>
                   <FormControl>
                     <UploadButton
-                      className="mt-4 ut-button:bg-primary ut-button:text-sm ut-button:ut-readying:bg-primary ut-button:ut-uploading:bg-primary"
+                      className="mt-4 ut-button:transition-all ut-button:border ut-button:bg-secondary/55 ut-button:text-sm ut-button:ut-readying:bg-secondary/55 ut-button:ut-uploading:bg-secondary/55 ut-button:text-primary ut-button:hover:bg-secondary"
                       endpoint="imageUploader"
                       onClientUploadComplete={(res) => {
                         // Do something with the response
@@ -198,11 +229,11 @@ export default function MetadataForm({ session, blogObj }: MetadataFormProps) {
             </div>
           </div>
           <div className="space-x-2">
-            <Button disabled={pending || !canSubmit || editorContent === '' || editorContent === '<p></p>'} type="submit">
-              {update && 'Update' || 'Submit'}
+            <Button disabled={pending} type="submit">
+              {update && 'Update' || 'Submit'} &amp; Publish
             </Button>
-            <Button variant="secondary" disabled={pending || !canSubmit || editorContent === '' || editorContent === '<p></p>'} type="button">
-              TODO: Save as draft
+            <Button variant="secondary" disabled={pending} type="button" onClick={form.handleSubmit(onDraft)}>
+              Save as draft
             </Button>
           </div>
         </form>

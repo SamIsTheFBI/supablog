@@ -7,9 +7,9 @@ export default function BlogCard({ post }: { post: SelectBlogs }) {
   return (
     <div className="rounded-md border space-y-3 h-full w-full hover:bg-secondary bg-card text-card-foreground group">
       <Link href={`/blog/${post.slug}`} className="space-y-2 flex flex-col p-5">
-        <div className="overflow-hidden rounded-md border">
-          {
-            (post.coverImage?.toString() !== '' && post.coverImage !== null) &&
+        {
+          (post.coverImage?.toString() !== '' && post.coverImage !== null) &&
+          <div className="overflow-hidden rounded-md border">
             <Image
               src={post.coverImage}
               alt="cover image"
@@ -17,8 +17,8 @@ export default function BlogCard({ post }: { post: SelectBlogs }) {
               width={640}
               className="aspect-video h-56 w-full object-cover group-hover:scale-110 transition-transform"
             />
-          }
-        </div>
+          </div>
+        }
         <h1 className="text-3xl font-bold">
           {post.title}
         </h1>

@@ -5,7 +5,7 @@ import Image from "next/image"
 export default async function Page({ params }: { params: { slug: string } }) {
   const blogData = await getPostBySlug(params.slug)
 
-  if (blogData.length === 0)
+  if (blogData.length === 0 || blogData[0].isDraft)
     return (
       <div>404</div>
     )

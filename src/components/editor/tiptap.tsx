@@ -49,6 +49,9 @@ export default function Tiptap({ session, blogObj }: EditorProps) {
         autolink: true,
       })
     ],
+    onCreate({ editor }) {
+      setEditorContent(editor.getHTML())
+    },
     content: blogObj?.content || '',
     onUpdate({ editor }) {
       let canUndo = editor.can().chain().focus().undo().run()
@@ -60,7 +63,6 @@ export default function Tiptap({ session, blogObj }: EditorProps) {
   if (!editor) {
     return null
   }
-
 
   return (
     <>

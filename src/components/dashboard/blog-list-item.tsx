@@ -38,8 +38,8 @@ export default function BlogListItem({ post }: { post: SelectBlogs }) {
     <>
       <div className="px-4 py-2 border rounded-sm flex justify-between items-center text-wrap gap-2 hover:bg-secondary">
         <div className="inline-flex justify-between items-center flex-grow mr-4 lg:mr-16">
-          <Link href={`/edit-post/${post.slug}`} className="hover:underline group underline-offset-2 inline-flex gap-x-2 items-center">
-            {post.title}
+          <Link href={`/edit-post/${post.slug}`} className={`hover:underline group underline-offset-2 inline-flex gap-x-2 items-center ${post.isDraft && `decoration-muted-foreground`}`}>
+            <span className={post.isDraft && 'text-muted-foreground' || ''}>{post.title}</span>
             <span className="text-muted-foreground text-sm group-hover:flex hidden">
               <LuPencil />
             </span>
