@@ -1,8 +1,56 @@
 import BlogCard from "@/components/blog/blog-card"
-import { getPublishedPosts } from "@/server/actions/blogActions"
+import { Button } from "@/components/ui/button"
+import { getPostsByOffset, getPublishedPosts, getPublishedPostsCount } from "@/server/actions/blogActions"
+import { LuArrowLeft, LuArrowRight } from "react-icons/lu"
 
-export default async function Blog() {
-  const data = await getPublishedPosts()
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
+import { cn } from "@/lib/utils"
+
+export default async function Blog({
+  searchParams
+}: {
+  searchParams: { [key: string]: number | undefined }
+}) {
+  const limit = 4
+  const visiblePaginationCnt = 3
+  const offset = searchParams.page && (searchParams.page - 1) * limit || 0
+  const data = await getPostsByOffset(offset, limit)
+  const count = await getPublishedPostsCount()
+  const pageCnt = Math.ceil(count / limit);
+
+  function getPrevPage() {
+    {
+      if (searchParams.page) {
+        if (searchParams.page > 1) {
+          return Number(searchParams.page) - 1;
+        }
+      }
+
+      return -1
+    }
+  }
+
+  function getNextPage() {
+    {
+      if (searchParams.page) {
+        if (searchParams.page < pageCnt) {
+          return Number(searchParams.page) + 1;
+        }
+      }
+
+      return -1
+    }
+  }
+  const nextPage = getNextPage()
+  const prevPage = getPrevPage()
   return (
     <>
       <main className="space-y-6 p-4 max-w-7xl mx-auto">
@@ -21,6 +69,50 @@ export default async function Blog() {
             ))}
           </ul>
         </div>
+        {}
+        <Pagination className={cn(visiblePaginationCnt > pageCnt && "hidden")}>
+          <PaginationContent>
+            {prevPage > -1 &&
+              <PaginationItem>
+                <PaginationPrevious href={`/blog?page=${prevPage}`} />
+              </PaginationItem>
+            }
+            {
+              (pageCnt > visiblePaginationCnt + 1 && Number(searchParams.page) - visiblePaginationCnt > 0) &&
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+            }
+            {Array(pageCnt)
+              .fill(0)
+              .map((_, idx) => (
+                <PaginationItem key={idx}>
+                  <PaginationLink
+                    href={`/blog?page=${idx + 1}`}
+                    isActive={Number(searchParams.page) === idx + 1}
+                    className={cn(
+                      !(Number(searchParams.page) === idx + 1) && "text-muted-foreground" || "",
+                      Number(searchParams.page) - visiblePaginationCnt >= idx + 1 && "hidden",
+                      Number(searchParams.page) + visiblePaginationCnt <= idx + 1 && "hidden",
+                    )}
+                  >
+                    {idx + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+            {
+              (pageCnt > visiblePaginationCnt + 1 && Number(searchParams.page) + visiblePaginationCnt <= pageCnt) &&
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+            }
+            {nextPage > -1 &&
+              <PaginationItem>
+                <PaginationNext href={`/blog?page=${nextPage}`} />
+              </PaginationItem>
+            }
+          </PaginationContent>
+        </Pagination>
       </main>
     </>
   )

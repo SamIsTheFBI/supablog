@@ -39,6 +39,16 @@ export async function publishAction(blogPost: InsertBlogs): Promise<ActionResult
   redirect("/dashboard")
 }
 
+export async function getPostsByOffset(offset: number, limit: number, published: boolean = true) {
+  const data = await db.select().from(blogs).where(eq(blogs.isDraft, !published)).orderBy(desc(blogs.createdAt)).limit(limit).offset(offset)
+  return data
+}
+
+export async function getPublishedPostsCount() {
+  const data = await db.select().from(blogs).where(eq(blogs.isDraft, false))
+  return data.length
+}
+
 export async function getPublishedPosts() {
   const data = await db.select().from(blogs).where(eq(blogs.isDraft, false)).orderBy(desc(blogs.createdAt))
   return data
