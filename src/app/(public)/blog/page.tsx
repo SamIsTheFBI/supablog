@@ -1,14 +1,10 @@
 import BlogCard from "@/components/blog/blog-card"
-import { Button } from "@/components/ui/button"
-import { getPostsByOffset, getPublishedPosts, getPublishedPostsCount } from "@/server/actions/blogActions"
-import { LuArrowLeft, LuArrowRight } from "react-icons/lu"
+import { getPostsByOffset, getPublishedPostsCount } from "@/server/actions/blogActions"
 
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
-  PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
@@ -19,42 +15,46 @@ export default async function Blog({
 }: {
   searchParams: { [key: string]: number | undefined }
 }) {
-  const limit = 4
+  const POST_PER_PAGE = 4
   const visiblePaginationCnt = 3
-  const offset = searchParams.page && (searchParams.page - 1) * limit || 0
-  const data = await getPostsByOffset(offset, limit)
+  const offset = searchParams.page && (searchParams.page - 1) * POST_PER_PAGE || 0
+  const data = await getPostsByOffset(offset, POST_PER_PAGE)
   const count = await getPublishedPostsCount()
-  const pageCnt = Math.ceil(count / limit);
+  const pageCnt = Math.ceil(count / POST_PER_PAGE);
 
-  function getPrevPage() {
-    {
-      if (searchParams.page) {
-        if (searchParams.page > 1) {
-          return Number(searchParams.page) - 1;
-        }
-      }
-
-      return -1
+  if (searchParams.page) {
+    if (searchParams.page > pageCnt || searchParams.page < 0) {
+      return <div>404</div>
     }
   }
 
+  function getPrevPage() {
+    if (searchParams.page) {
+      if (searchParams.page > 1) {
+        return Number(searchParams.page) - 1;
+      }
+    }
+
+    return -1
+  }
+
   function getNextPage() {
-    {
-      if (searchParams.page) {
-        if (searchParams.page < pageCnt) {
-          return Number(searchParams.page) + 1;
-        }
+    if (searchParams.page) {
+      if (searchParams.page < pageCnt) {
+        return Number(searchParams.page) + 1;
       }
 
       return -1
     }
+
+    return 2
   }
   const nextPage = getNextPage()
   const prevPage = getPrevPage()
   return (
     <>
       <main className="space-y-6 p-4 max-w-7xl mx-auto">
-        <div className="space-y-2 mt-16 text-center">
+        <div className="space-y-2 sm:mt-12 text-center">
           <p className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
             Featured Posts
           </p>
@@ -70,40 +70,11 @@ export default async function Blog({
           </ul>
         </div>
         {}
-        <Pagination className={cn(visiblePaginationCnt > pageCnt && "hidden")}>
-          <PaginationContent>
+        <Pagination className={cn(visiblePaginationCnt > pageCnt && "hidden", "mx-auto max-w-2xl")}>
+          <PaginationContent className={cn("flex justify-between items-center w-full", prevPage < 1 && "justify-end", nextPage < 1 && "justify-start")}>
             {prevPage > -1 &&
               <PaginationItem>
                 <PaginationPrevious href={`/blog?page=${prevPage}`} />
-              </PaginationItem>
-            }
-            {
-              (pageCnt > visiblePaginationCnt + 1 && Number(searchParams.page) - visiblePaginationCnt > 0) &&
-              <PaginationItem>
-                <PaginationEllipsis />
-              </PaginationItem>
-            }
-            {Array(pageCnt)
-              .fill(0)
-              .map((_, idx) => (
-                <PaginationItem key={idx}>
-                  <PaginationLink
-                    href={`/blog?page=${idx + 1}`}
-                    isActive={Number(searchParams.page) === idx + 1}
-                    className={cn(
-                      !(Number(searchParams.page) === idx + 1) && "text-muted-foreground" || "",
-                      Number(searchParams.page) - visiblePaginationCnt >= idx + 1 && "hidden",
-                      Number(searchParams.page) + visiblePaginationCnt <= idx + 1 && "hidden",
-                    )}
-                  >
-                    {idx + 1}
-                  </PaginationLink>
-                </PaginationItem>
-              ))}
-            {
-              (pageCnt > visiblePaginationCnt + 1 && Number(searchParams.page) + visiblePaginationCnt <= pageCnt) &&
-              <PaginationItem>
-                <PaginationEllipsis />
               </PaginationItem>
             }
             {nextPage > -1 &&

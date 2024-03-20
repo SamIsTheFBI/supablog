@@ -39,6 +39,11 @@ export async function publishAction(blogPost: InsertBlogs): Promise<ActionResult
   redirect("/dashboard")
 }
 
+export async function getAuthorById(id: string) {
+  const data = await db.select().from(users).where(eq(users.id, id))
+  return data[0]
+}
+
 export async function getPostsByOffset(offset: number, limit: number, published: boolean = true) {
   const data = await db.select().from(blogs).where(eq(blogs.isDraft, !published)).orderBy(desc(blogs.createdAt)).limit(limit).offset(offset)
   return data
