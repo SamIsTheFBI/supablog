@@ -11,7 +11,7 @@ export async function GET(): Promise<Response> {
     path: "/",
     secure: process.env.NODE_ENV === "production",
     httpOnly: true,
-    maxAge: 60 * 10,
+    maxAge: 60 * 60 * 24 * 90,
     sameSite: "lax"
   });
 

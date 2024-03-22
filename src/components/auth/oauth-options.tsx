@@ -12,14 +12,14 @@ export default function OauthOptions() {
           </span>
         </a>
       </Button>
-      {/*<Button variant="outline" asChild className="flex justify-start w-full items-center gap-x-4">
+      <Button variant="outline" asChild className="flex justify-start w-full items-center gap-x-4">
         <a href="/oauth/google">
           <FaGoogle />
           <span>
             Continue with Google
           </span>
         </a>
-      </Button>*/}
+      </Button>
     </div>
   )
 }
