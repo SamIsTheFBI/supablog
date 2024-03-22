@@ -33,11 +33,13 @@ export async function signInAction(
       }
     }
 
-    const validPassword = await new Argon2id().verify(existingUser.hashedPassword, data.password)
+    if (existingUser.hashedPassword) {
+      const validPassword = await new Argon2id().verify(existingUser.hashedPassword, data.password)
 
-    if (!validPassword) {
-      return {
-        error: "Incorrect credentials!",
+      if (!validPassword) {
+        return {
+          error: "Incorrect credentials!",
+        }
       }
     }
 

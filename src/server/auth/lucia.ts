@@ -4,6 +4,8 @@ import { db } from "@/server/db"
 import { sessions, users } from "@/server/db/schema/auth"
 import { cache } from "react"
 import { cookies } from "next/headers"
+import { GitHub, Google } from "arctic"
+import { env } from "@/env"
 
 declare module 'lucia' {
   interface Register {
@@ -18,6 +20,10 @@ interface DatabaseUserAttributes {
 }
 
 export const adapter = new DrizzlePostgreSQLAdapter(db, sessions, users)
+
+const googleRedirectUrl = `${env.LUCIA_AUTH_URL}/auth/oauth/google/callback`
+// export const googleOauth = new Google(env.GOOGLE_CLIENT_ID, env.GOOGLE_CLIENT_SECRET, googleRedirectUrl)
+export const githubOauth = new GitHub(env.GITHUB_CLIENT_ID, env.GITHUB_CLIENT_SECRET)
 
 export const lucia = new Lucia(adapter, {
   sessionCookie: {

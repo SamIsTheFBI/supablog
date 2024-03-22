@@ -19,6 +19,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { useFormState, useFormStatus } from "react-dom"
 import { signInAction } from "@/server/actions/authActions"
 import AuthFormError from "./AuthFormError"
+import OauthOptions from "./oauth-options"
 
 const formSchema = z.object({
   email: z.string().email({
@@ -54,7 +55,7 @@ const SignInForm = () => {
           </CardDescription>
         </CardHeader>
         <div className="px-6 pb-4">
-          TODO: OAuth
+          <OauthOptions />
         </div>
         <Form {...form}>
           <form action={formAction}>

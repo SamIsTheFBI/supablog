@@ -1,5 +1,7 @@
 "use client"
 
+import { FaDiscord, FaGithub, FaGoogle } from "react-icons/fa"
+
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -19,6 +21,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import AuthFormError from "./AuthFormError"
 import { useFormState, useFormStatus } from "react-dom"
 import { signUpAction } from "@/server/actions/authActions"
+import OauthOptions from "./oauth-options"
 
 const formSchema = z.object({
   name: z.string(),
@@ -59,7 +62,7 @@ const SignUpForm = () => {
           </CardDescription>
         </CardHeader>
         <div className="px-6 pb-4">
-          TODO: OAuth
+          <OauthOptions />
         </div>
         <Form {...form}>
           <form action={formAction}>
