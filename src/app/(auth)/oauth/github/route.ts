@@ -1,5 +1,3 @@
-"use server"
-
 import { githubOauth } from "@/server/auth/lucia";
 import { generateState } from "arctic";
 import { cookies } from "next/headers";

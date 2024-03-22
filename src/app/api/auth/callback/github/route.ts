@@ -1,5 +1,3 @@
-"use server"
-
 import { cookies } from "next/headers";
 import { OAuth2RequestError } from "arctic";
 import { generateId } from "lucia";
