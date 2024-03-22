@@ -26,6 +26,7 @@ import { Label } from "../ui/label";
 import { UploadButton } from "./uploadthing";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 export type MetadataFormProps = {
   session: AuthSession,
@@ -141,8 +142,18 @@ export default function MetadataForm({ session, blogObj }: MetadataFormProps) {
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 flex flex-col justify-between h-full">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 flex flex-col justify-between h-full py-2">
           <div className="space-y-3">
+            {blogObj &&
+              <div className="flex flex-wrap justify-between text-sm">
+                <span>
+                  {blogObj?.updatedAt && (`Last updated on: ${blogObj.updatedAt.toLocaleString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}`)}
+                </span>
+                <span>
+                  Status: {(blogObj && blogObj.isDraft) && "Draft" || "Published"}
+                </span>
+              </div>
+            }
             <FormField
               control={form.control}
               name="title"
