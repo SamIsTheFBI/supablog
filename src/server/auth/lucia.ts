@@ -22,8 +22,12 @@ interface DatabaseUserAttributes {
 export const adapter = new DrizzlePostgreSQLAdapter(db, sessions, users)
 
 const googleRedirectUrl = `${env.LUCIA_AUTH_URL}/auth/oauth/google/callback`
+const githubRedirectUrl = `${env.LUCIA_AUTH_URL}/api/auth/callback/github`
+
 // export const googleOauth = new Google(env.GOOGLE_CLIENT_ID, env.GOOGLE_CLIENT_SECRET, googleRedirectUrl)
-export const githubOauth = new GitHub(env.GITHUB_CLIENT_ID, env.GITHUB_CLIENT_SECRET)
+export const githubOauth = new GitHub(env.GITHUB_CLIENT_ID, env.GITHUB_CLIENT_SECRET, {
+  redirectURI: githubRedirectUrl
+})
 
 export const lucia = new Lucia(adapter, {
   sessionCookie: {
