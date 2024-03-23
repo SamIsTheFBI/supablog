@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { z } from "zod";
 
 export const users = pgTable("user", {
@@ -6,6 +6,9 @@ export const users = pgTable("user", {
   email: text("email").notNull().unique(),
   hashedPassword: text("hashed_password"),
   name: text("name"),
+  isAuthor: boolean("is_author").notNull().default(false),
+  avatarUrl: text("avatar_url"),
+  authMethods: text("auth_methods").array(),
 })
 
 export const sessions = pgTable("session", {

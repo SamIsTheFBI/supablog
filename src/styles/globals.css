@@ -20,6 +20,10 @@ article > div {
   min-height: calc(100dvh - var(--header-height));
 }
 
+.sidebar-height {
+  max-height: calc(95dvh - var(--header-height));
+}
+
 .max-h-main {
   max-height: calc(97dvh - var(--header-height));
 }

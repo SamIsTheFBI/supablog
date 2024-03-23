@@ -1,35 +1,84 @@
 import SignOutButton from "@/components/auth/SignOutButton"
 import BlogListItem from "@/components/dashboard/blog-list-item"
+import UserDataForm from "@/components/dashboard/user-data-form"
 import { Button } from "@/components/ui/button"
-import { getPostsByUserId } from "@/server/actions/blogActions"
+import { getAllPosts, getPostsByUserId, getRecentPosts } from "@/server/actions/blogActions"
 import { getUserAuth } from "@/server/auth/utils"
 import Link from "next/link"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { PiNotePencil, PiNotebookDuotone } from "react-icons/pi";
+import { LuUser } from "react-icons/lu"
 
 export default async function DashboardPage() {
   const { session } = await getUserAuth()
-  const data = await getPostsByUserId(session?.user.id as string)
+  const postData = await getRecentPosts(4)
   return (
     <>
-      <main className="space-y-8 p-4 max-w-7xl mx-auto">
-        <div className="space-y-2">
-          <h1 className="text-2xl font-bold">User Data</h1>
-          <pre className="bg-secondary p-2 rounded-md overflow-auto">
-            {JSON.stringify(session, null, 2)}
-          </pre>
-          <SignOutButton />
+      <div className="space-y-4 p-4 max-w-7xl">
+        <div className="space-y-1">
+          <h1 className="text-2xl sm:text-3xl xl:text-4xl tracking-tighter font-bold">Welcome back, {session?.user.name?.replace(/ .*/, '')} 👋</h1>
+          <p className="text-muted-foreground text-sm leading-tight">You're logged in as {session?.user.email}</p>
         </div>
+        <ul className="gap-y-4 gap-x-6 flex flex-wrap items-center">
+          <li>
+            <Link href="/create-post" className="bg-secondary/55 border py-2 px-4 rounded-md overflow-auto space-y-3 space-x-6 flex items-center max-w-sm hover:cursor-pointer hover:bg-secondary">
+              <div className="bg-background dark:bg-secondary p-4 rounded-full antialiased shadow-md dark:shadow-background">
+                <PiNotePencil size={34} />
+              </div>
+              <div className="flex flex-col space-y-2">
+                <span className="font-bold tracking-tighter leading-tight">
+                  Create a new Post
+                </span>
+                <p className="text-pretty text-sm text-muted-foreground pb-3 leading-tight">
+                  Embrace the power of expression and join the conversation by creating your next captivating post!
+                </p>
+              </div>
+            </Link>
+          </li>
+          <li>
+            <Link href="/dashboard/posts" className="bg-secondary/55 border py-2 px-4 rounded-md overflow-auto space-y-3 space-x-6 flex items-center max-w-sm hover:cursor-pointer hover:bg-secondary">
+              <div className="bg-background dark:bg-secondary p-4 rounded-full antialiased shadow-md dark:shadow-background">
+                <PiNotebookDuotone size={34} />
+              </div>
+              <div className="flex flex-col space-y-2">
+                <span className="font-bold tracking-tighter leading-tight">
+                  View All Posts
+                </span>
+                <p className="text-pretty text-sm text-muted-foreground pb-3 leading-tight">
+                  Seeking inspiration? Take a stroll down memory lane and revisit your past posts.
+                </p>
+              </div>
+            </Link>
+          </li>
+          <li>
+            <Link href="/dashboard/account" className="bg-secondary/55 border py-2 px-4 rounded-md overflow-auto space-y-3 space-x-6 flex items-center max-w-sm hover:cursor-pointer hover:bg-secondary">
+              <div className="bg-background dark:bg-secondary p-4 rounded-full antialiased shadow-md dark:shadow-background">
+                <LuUser size={34} />
+              </div>
+              <div className="flex flex-col space-y-2">
+                <span className="font-bold tracking-tighter leading-tight">
+                  Update your Profile
+                </span>
+                <p className="text-pretty text-sm text-muted-foreground pb-3 leading-tight">
+                  Update your name, share your interests, your dreams. Let the readers know you better!
+                </p>
+              </div>
+            </Link>
+          </li>
+        </ul>
+        <UserDataForm session={{ session }} />
         <div className="space-y-2">
           <div className="flex justify-between">
-            <h1 className="text-2xl font-bold">Your Posts: </h1>
-            <Button className="font-bold" asChild><Link href="/create-post">Create Post</Link></Button>
+            <h1 className="text-2xl font-bold">Recent Posts: </h1>
           </div>
           <ul className="space-y-2">
-            {data.map((post) => (
+            {postData.map((post) => (
               <li key={post.id}><BlogListItem post={post} /></li>
             ))}
           </ul>
         </div>
-      </main>
+        <SignOutButton />
+      </div>
     </>
   )
 }

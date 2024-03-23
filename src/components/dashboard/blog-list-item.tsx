@@ -18,6 +18,7 @@ import { deletePost } from "@/server/actions/blogActions";
 import { Input } from "../ui/input";
 import { useFormState } from "react-dom";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 export default function BlogListItem({ post }: { post: SelectBlogs }) {
   const [state, formAction] = useFormState(handleDeletePost, {
@@ -37,14 +38,16 @@ export default function BlogListItem({ post }: { post: SelectBlogs }) {
   return (
     <>
       <div className="px-4 py-2 border rounded-sm flex justify-between items-center text-wrap gap-2 hover:bg-secondary">
-        <div className="inline-flex justify-between items-center flex-grow mr-4 lg:mr-16">
+        <div className="inline-flex justify-between items-center flex-grow mr-4 lg:mr-16 max-sm:flex-wrap w-full">
           <Link href={`/edit-post/${post.slug}`} className={`hover:underline group underline-offset-2 inline-flex gap-x-2 items-center ${post.isDraft && `decoration-muted-foreground`}`}>
-            <span className={post.isDraft && 'text-muted-foreground' || ''}>{post.title}</span>
             <span className="text-muted-foreground text-sm group-hover:flex hidden">
               <LuPencil />
             </span>
+            <span className={cn(post.isDraft && 'text-muted-foreground', "max-w-md text-pretty sm:truncate")}>{post.title}</span>
           </Link>
-          <span className="text-muted-foreground text-sm">{post.createdAt.toString() === post.updatedAt.toString() && 'Created at ' || 'Last updated at '}{post.updatedAt.toLocaleString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
+          <span className="text-muted-foreground text-sm max-sm:text-xs">
+            {post.createdAt.toString() === post.updatedAt.toString() && 'Created at ' || 'Last updated at '}{post.updatedAt.toLocaleString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}
+          </span>
         </div>
         <div className="inline-flex items-center">
           <Link href={`/edit-post/${post.slug}`} className="p-2 hover:bg-secondary rounded-sm">

@@ -131,7 +131,7 @@ export async function updateUser(
       .update(users)
       .set({ ...result.data })
       .where(eq(users.id, session.user.id));
-    revalidatePath("/account");
+    revalidatePath("/dashboard");
     return { success: true, error: "" };
   } catch (e) {
     return genericError;

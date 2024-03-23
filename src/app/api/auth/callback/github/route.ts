@@ -1,3 +1,5 @@
+"use server"
+
 import { cookies } from "next/headers";
 import { OAuth2RequestError } from "arctic";
 import { generateId } from "lucia";
@@ -25,6 +27,14 @@ export async function GET(request: Request): Promise<Response> {
         Authorization: `Bearer ${tokens.accessToken}`
       }
     });
+    const githubUserEmailsResponse = await fetch("https://api.github.com/user/emails", {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`
+      }
+    });
+
+    console.log(githubUserEmailsResponse)
+
     const githubUser: GitHubUser = await githubUserResponse.json();
     let userEmail: string
     if (githubUser.email) {
