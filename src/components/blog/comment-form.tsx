@@ -20,21 +20,17 @@ export default function CommentForm({ session, postSlug }: { session: AuthSessio
 
   const ref = useRef<HTMLFormElement>(null)
 
-  if (session.session) {
-    return (
-      <form
-        ref={ref}
-        action={async (formData) => {
-          await postCommentWithDetails(formData)
-          ref.current?.reset()
-        }}
-        className="space-y-4"
-      >
-        <Textarea name="comment" required></Textarea>
-        <Button disabled={pending}>Post{pending && 'ing'} comment</Button>
-      </form>
-    )
-  }
-
-  return null
+  return (
+    <form
+      ref={ref}
+      action={async (formData) => {
+        await postCommentWithDetails(formData)
+        ref.current?.reset()
+      }}
+      className="space-y-4"
+    >
+      <Textarea name="comment" required></Textarea>
+      <Button disabled={pending}>Post{pending && 'ing'} comment</Button>
+    </form>
+  )
 }

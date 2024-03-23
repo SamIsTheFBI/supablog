@@ -17,7 +17,7 @@ export default async function DashboardPage() {
       <div className="space-y-4 p-4 max-w-7xl">
         <div className="space-y-1">
           <h1 className="text-2xl sm:text-3xl xl:text-4xl tracking-tighter font-bold">Welcome back, {session?.user.name?.replace(/ .*/, '')} 👋</h1>
-          <p className="text-muted-foreground text-sm leading-tight">You're logged in as {session?.user.email}</p>
+          <p className="text-muted-foreground text-sm leading-tight">You&apos;re logged in as {session?.user.email}</p>
         </div>
         <ul className="gap-y-4 gap-x-6 flex flex-wrap items-center">
           <li>
