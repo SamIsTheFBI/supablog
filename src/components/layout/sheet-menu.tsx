@@ -41,13 +41,13 @@ export default async function SheetMenu() {
             </div>
             {session.session?.user
               &&
-              <div className="w-full mb-24">
-                <div className="flex justify-between gap-x-4 px-2 py-4 border-t border-foreground/30">
-                  <div className=" text-left flex flex-col justify-center">
-                    <span className="inline-block text-muted-foreground">{name !== null && name || ''}</span>
-                    <span className="inline-block text-sm text-muted-foreground">{session.session.user.email}</span>
+              <div className="text-sm w-full mb-24 tracking-tighter">
+                <div className="flex justify-between gap-x-4 py-4 border-t border-foreground/30">
+                  <div className=" text-left flex flex-col justify-center w-4/6">
+                    <span className="inline-block text-muted-foreground font-bold">{name !== null && name || ''}</span>
+                    <span className="inline-block text-xs text-muted-foreground w-full truncate">{session.session.user.email}</span>
                   </div>
-                  <div className="size-16 rounded-md inline-flex bg-secondary items-center justify-center text-muted-foreground">{initials !== null && initials}</div>
+                  <div className="size-16 min-w-16 rounded-md inline-flex bg-secondary items-center justify-center text-muted-foreground">{initials !== null && initials}</div>
                 </div>
               </div>
               ||

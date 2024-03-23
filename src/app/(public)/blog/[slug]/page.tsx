@@ -1,11 +1,20 @@
+import CommentForm from "@/components/blog/comment-form"
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import { getPostBySlug, getUserById } from "@/server/actions/blogActions"
+import { getCommentsByPostId } from "@/server/actions/commentActions"
+import { getUserAuth } from "@/server/auth/utils"
+import { BadgeIcon } from "@radix-ui/react-icons"
 import DOMPurify from "isomorphic-dompurify"
 import Image from "next/image"
+import Link from "next/link"
 import { BsFacebook, BsLinkedin, BsReddit, BsTwitterX } from "react-icons/bs"
 import { LuFacebook, LuTwitter, LuX } from "react-icons/lu"
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const blogData = await getPostBySlug(params.slug)
+  const { session } = await getUserAuth()
 
   if (blogData.length === 0 || blogData[0].isDraft)
     return (
@@ -14,6 +23,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
   const authorName = await getUserById(blogData[0].authorId)
   const blogContent = DOMPurify.sanitize(blogData[0].content)
+  const commentData = await getCommentsByPostId(blogData[0].slug)
   return (
     <>
       <main className="max-w-7xl mx-auto mt-2 sm:mt-8">
@@ -65,6 +75,38 @@ export default async function Page({ params }: { params: { slug: string } }) {
               <BsFacebook />
             </div>
           </div>
+        </div>
+        <div className="max-w-2xl mx-auto px-4 flex flex-col justify-start mb-3">
+          <span className="mb-4">
+            Comments ({commentData.length})
+          </span>
+          {session &&
+            <CommentForm session={{ session }} postSlug={params.slug} />
+            ||
+            <Button asChild>
+              <Link href="/sign-in">
+                Sign in to comment
+              </Link>
+            </Button>
+          }
+          <ul className="mt-4 space-y-4">
+            {commentData.map((item) => (
+              <li key={item.comments.id} className="bg-secondary/15 p-4 border shadow-sm dark:shadow-primary/15 rounded-md space-y-2">
+                <div className="space-x-2">
+                  <span className="font-bold max-sm:text-sm">{item.user?.name?.split(' ').slice(0, 2).join(' ')}</span>
+                  {
+                    blogData[0].authorId === item.user?.id &&
+                    <span className="text-xs bg-secondary px-2 py-1 rounded-md border antialiased">Author</span>
+                  }
+                  <span className="text-muted-foreground text-xs">&bull;</span>
+                  <span className="text-muted-foreground max-sm:text-xs text-sm">{item.comments.createdAt.toLocaleString()}</span>
+                </div>
+                <p>
+                  {item.comments.description}
+                </p>
+              </li>
+            ))}
+          </ul>
         </div>
       </main>
     </>
