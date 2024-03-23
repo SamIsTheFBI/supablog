@@ -8,11 +8,10 @@ import { useFormState, useFormStatus } from "react-dom"
 import { useRef } from "react"
 
 export default function CommentForm({ session, postSlug }: { session: AuthSession, postSlug: string }) {
-  if (!session.session) return null
 
   const commentDetails = {
     postSlug: postSlug,
-    userId: session.session.user.id
+    userId: session.session?.user.id as string
   }
 
   const postCommentWithDetails = postComment.bind(null, { error: "" }, commentDetails)

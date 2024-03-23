@@ -17,8 +17,6 @@ const formSchema = z.object({
 export default function UserDataForm({ session }: { session: AuthSession }) {
   const actualSession = session.session
 
-  if (!actualSession) return null
-
   const { pending } = useFormStatus()
   const [state, formAction] = useFormState(updateUser, {
     error: ""
@@ -27,7 +25,7 @@ export default function UserDataForm({ session }: { session: AuthSession }) {
   return (
     <div>
       <form className="flex flex-col max-w-sm" action={formAction}>
-        <Input type="text" name="name" placeholder={actualSession.user.name} />
+        <Input type="text" name="name" placeholder={actualSession?.user.name} />
         <Button disabled={pending}>Updat{pending && 'ing' || 'e'} Info</Button>
       </form>
     </div>
