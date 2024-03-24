@@ -10,11 +10,16 @@ import ThemeDropdown from "./ThemeDropdown"
 import { LuBookOpen, LuGithub, LuLayoutDashboard, LuLogIn, LuStickyNote } from "react-icons/lu"
 import { BsStars } from "react-icons/bs";
 import { getUserAuth } from "@/server/auth/utils"
+import Image from "next/image"
+import { getUserById } from "@/server/actions/blogActions"
 
 export default async function SheetMenu() {
   const session = await getUserAuth()
+  if (!session.session) return null
+
   const name = session.session?.user.name
   const initials = session.session?.user.name?.match(/(\b\S)?/g)?.join("").match(/(^\S|\S$)?/g)?.join("").toUpperCase()
+  const [userData] = await getUserById(session.session.user.id)
   return (
     <>
       <Sheet>
@@ -47,7 +52,20 @@ export default async function SheetMenu() {
                     <span className="inline-block text-muted-foreground font-bold">{name !== null && name || ''}</span>
                     <span className="inline-block text-xs text-muted-foreground w-full truncate">{session.session.user.email}</span>
                   </div>
-                  <div className="size-16 min-w-16 rounded-md inline-flex bg-secondary items-center justify-center text-muted-foreground">{initials !== null && initials}</div>
+                  <div className="size-16 min-w-16 rounded-full inline-flex bg-secondary items-center justify-center text-muted-foreground overflow-clip">
+                    {userData.avatarUrl
+                      &&
+                      <Image
+                        src={userData.avatarUrl}
+                        alt="pfp"
+                        height={64}
+                        width={64}
+                        className="aspect-video h-16 object-cover"
+                      />
+                      ||
+                      initials
+                    }
+                  </div>
                 </div>
               </div>
               ||

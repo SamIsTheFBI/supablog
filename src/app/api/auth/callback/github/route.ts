@@ -33,8 +33,6 @@ export async function GET(request: Request): Promise<Response> {
       }
     });
 
-    console.log(githubUserEmailsResponse)
-
     const githubUser: GitHubUser = await githubUserResponse.json();
     let userEmail: string
     if (githubUser.email) {

@@ -26,6 +26,8 @@ import { useState } from "react"
 import { cn } from "@/lib/utils"
 import { UploadButton } from "../editor/uploadthing"
 import Image from "next/image"
+import { updateUserInfo, uploadAvatarUrl } from "@/server/actions/userActions"
+import { toast } from "sonner"
 
 const formSchema = z.object({
   username: z.string().min(2).max(50),
@@ -44,9 +46,6 @@ export default function UserDataForm({ session, userData }: { session: AuthSessi
 
   const [socials, setSocials] = useState<Array<string>>([])
   const { pending } = useFormStatus()
-  const [state, formAction] = useFormState(updateUser, {
-    error: ""
-  })
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -64,10 +63,17 @@ export default function UserDataForm({ session, userData }: { session: AuthSessi
     control: form.control,
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values)
+
+    if (!actualSession) return
+
+    const res = await updateUserInfo(values, actualSession.user.id)
+    if (res?.error)
+      toast.error("An error occurred")
+    else
+      toast.success("User info updated")
   }
 
   const [imageUrl, setImageUrl] = useState(userData.avatarUrl)
@@ -82,9 +88,10 @@ export default function UserDataForm({ session, userData }: { session: AuthSessi
                 <Image
                   src={imageUrl}
                   alt="pfp"
-                  height={352}
-                  width={360}
-                  className="aspect-video h-56 rounded-md border object-cover"
+                  height={112}
+                  width={112}
+                  className="aspect-video h-28 w-28 object-cover"
+                  priority
                 />
               }
             </div>
@@ -93,9 +100,10 @@ export default function UserDataForm({ session, userData }: { session: AuthSessi
               <UploadButton
                 className="mt-4 ut-button:transition-all ut-button:border ut-button:bg-secondary/55 ut-button:text-sm ut-button:ut-readying:bg-secondary/55 ut-button:ut-uploading:bg-secondary/55 ut-button:text-primary ut-button:hover:bg-secondary"
                 endpoint="imageUploader"
-                onClientUploadComplete={(res) => {
+                onClientUploadComplete={async (res) => {
                   // Do something with the response
                   setImageUrl(res[0].url)
+                  await uploadAvatarUrl(res[0].url, userData.id)
                 }}
                 onUploadError={(error: Error) => {
                   // Do something with the error.

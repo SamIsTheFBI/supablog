@@ -13,7 +13,7 @@ export default async function AuthLayout({
     <>
       <Header />
       {children}
-      <Toaster />
+      <Toaster closeButton />
     </>
   );
 }
