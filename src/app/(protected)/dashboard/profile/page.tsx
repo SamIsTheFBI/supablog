@@ -10,7 +10,7 @@ export default async function DashboardAccountPage() {
   const [userData] = await getUserById(session.user.id)
   return (
     <>
-      <div className="space-y-4 p-4 w-full max-w-7xl">
+      <div className="space-y-4 p-4 sm:pt-8 w-full max-w-7xl">
         <div className="space-y-2">
           <div className="border-b pb-4">
             <h1 className="text-2xl font-bold">Profile</h1>

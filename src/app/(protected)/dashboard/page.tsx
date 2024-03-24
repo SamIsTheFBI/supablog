@@ -14,12 +14,12 @@ export default async function DashboardPage() {
   const postData = await getRecentPosts(4)
   return (
     <>
-      <div className="space-y-4 p-4 max-w-7xl w-full">
+      <div className="space-y-4 p-4 sm:pt-8 max-w-7xl w-full">
         <div className="space-y-1">
           <h1 className="text-2xl sm:text-3xl xl:text-4xl tracking-tighter font-bold">Welcome back, {session?.user.name?.replace(/ .*/, '')} 👋</h1>
           <p className="text-muted-foreground text-sm leading-tight">You&apos;re logged in as {session?.user.email}</p>
         </div>
-        <ul className="gap-y-4 gap-x-6 lg:grid lg:grid-cols-3 lg:grid-rows-1 flex flex-wrap">
+        <ul className="gap-y-4 gap-x-6 xl:grid xl:grid-cols-3 xl:grid-rows-1 flex flex-wrap">
           <li>
             <Link href="/create-post" className="h-full bg-secondary/55 border py-2 px-4 rounded-md overflow-auto space-y-3 space-x-6 flex items-center max-w-sm hover:cursor-pointer hover:bg-secondary">
               <div className="bg-background dark:bg-secondary p-4 rounded-full antialiased shadow-md dark:shadow-background">
@@ -51,7 +51,7 @@ export default async function DashboardPage() {
             </Link>
           </li>
           <li>
-            <Link href="/dashboard/account" className="h-full bg-secondary/55 border py-2 px-4 rounded-md overflow-auto space-y-3 space-x-6 flex items-center max-w-sm hover:cursor-pointer hover:bg-secondary">
+            <Link href="/dashboard/profile" className="h-full bg-secondary/55 border py-2 px-4 rounded-md overflow-auto space-y-3 space-x-6 flex items-center max-w-sm hover:cursor-pointer hover:bg-secondary">
               <div className="bg-background dark:bg-secondary p-4 rounded-full antialiased shadow-md dark:shadow-background">
                 <LuUser size={34} />
               </div>

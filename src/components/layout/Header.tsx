@@ -34,8 +34,8 @@ export default async function Header() {
               Sign In
             </Link>
           }
-          <SheetMenu />
         </div>
+        <SheetMenu />
       </div>
     </header>
   )

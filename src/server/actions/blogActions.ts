@@ -60,7 +60,7 @@ export async function getPublishedPosts() {
 }
 
 export async function getRecentPosts(limit: number) {
-  const data = await db.select().from(blogs).orderBy(desc(blogs.updatedAt)).limit(limit)
+  const data = await db.select().from(blogs).where(eq(blogs.isDraft, false)).orderBy(desc(blogs.updatedAt)).limit(limit)
   return data
 }
 

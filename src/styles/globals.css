@@ -21,7 +21,7 @@ article > div {
 }
 
 .sidebar-height {
-  max-height: calc(95dvh - var(--header-height));
+  height: calc(95dvh - var(--header-height));
 }
 
 .max-h-main {

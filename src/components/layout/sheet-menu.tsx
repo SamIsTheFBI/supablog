@@ -12,18 +12,15 @@ import { BsStars } from "react-icons/bs";
 import { getUserAuth } from "@/server/auth/utils"
 import Image from "next/image"
 import { getUserById } from "@/server/actions/blogActions"
+import UserPfpBox from "../dashboard/user-pfp-box"
 
 export default async function SheetMenu() {
   const session = await getUserAuth()
-  if (!session.session) return null
 
-  const name = session.session?.user.name
-  const initials = session.session?.user.name?.match(/(\b\S)?/g)?.join("").match(/(^\S|\S$)?/g)?.join("").toUpperCase()
-  const [userData] = await getUserById(session.session.user.id)
   return (
     <>
       <Sheet>
-        <SheetTrigger className="sm:hidden"><HamburgerMenuIcon /></SheetTrigger>
+        <SheetTrigger className="sm:hidden p-2 border border-primary rounded-md"><HamburgerMenuIcon /></SheetTrigger>
         <SheetContent>
           <SheetHeader className="-mt-4">
             <ThemeDropdown />
@@ -44,40 +41,25 @@ export default async function SheetMenu() {
                 <Link href="/dashboard" className="hover:bg-secondary px-4 py-2 flex justify-start items-center gap-x-4 "><LuLayoutDashboard />Dashboard</Link>
               }
             </div>
-            {session.session?.user
-              &&
-              <div className="text-sm w-full mb-24 tracking-tighter">
-                <div className="flex justify-between gap-x-4 py-4 border-t border-foreground/30">
-                  <div className=" text-left flex flex-col justify-center w-4/6">
-                    <span className="inline-block text-muted-foreground font-bold">{name !== null && name || ''}</span>
-                    <span className="inline-block text-xs text-muted-foreground w-full truncate">{session.session.user.email}</span>
-                  </div>
-                  <div className="size-16 min-w-16 rounded-full inline-flex bg-secondary items-center justify-center text-muted-foreground overflow-clip">
-                    {userData.avatarUrl
-                      &&
-                      <Image
-                        src={userData.avatarUrl}
-                        alt="pfp"
-                        height={64}
-                        width={64}
-                        className="aspect-video h-16 object-cover"
-                      />
-                      ||
-                      initials
-                    }
-                  </div>
-                </div>
-              </div>
-              ||
-              <div className="w-full mb-24">
-                <div className="flex justify-between gap-x-4 px-2 py-4 ">
-                  <Link href="/sign-in" className="hover:bg-secondary text-left flex justify-start items-center gap-x-4 w-full  px-4 py-2">
-                    <LuLogIn />
-                    Sign In
+            <div>
+              {session.session?.user
+                &&
+                <div className="border-t pt-4 mb-28">
+                  <Link href="/dashboard">
+                    <UserPfpBox />
                   </Link>
                 </div>
-              </div>
-            }
+                ||
+                <div className="w-full mb-24">
+                  <div className="flex justify-between gap-x-4 px-2 py-4 ">
+                    <Link href="/sign-in" className="hover:bg-secondary text-left flex justify-start items-center gap-x-4 w-full  px-4 py-2">
+                      <LuLogIn />
+                      Sign In
+                    </Link>
+                  </div>
+                </div>
+              }
+            </div>
           </div>
         </SheetContent>
       </Sheet>
