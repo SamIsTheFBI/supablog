@@ -4,10 +4,12 @@ import { db } from "@/server/db"
 import { users } from "../db/schema/auth"
 import { eq } from "drizzle-orm"
 import { genericError } from "../auth/utils"
+import { revalidatePath } from "next/cache"
 
 export async function uploadAvatarUrl(url: string, userId: string) {
   try {
     await db.update(users).set({ avatarUrl: url }).where(eq(users.id, userId))
+    revalidatePath("/dashboard")
   } catch (e) {
     return genericError
   }
