@@ -9,6 +9,8 @@ export const users = pgTable("user", {
   isAuthor: boolean("is_author").notNull().default(false),
   avatarUrl: text("avatar_url"),
   authMethods: text("auth_methods").array(),
+  socialLinks: text("social_links").array(),
+  bio: text("bio"),
 })
 
 export const sessions = pgTable("session", {
@@ -46,3 +48,6 @@ export const updateUserSchema = z.object({
 
 export type NameAndUsernameAndPassword = z.infer<typeof signUpSchema>;
 export type UsernameAndPassword = z.infer<typeof authenticationSchema>;
+
+export type SelectUsers = typeof users.$inferSelect
+export type InsertUsers = typeof users.$inferInsert

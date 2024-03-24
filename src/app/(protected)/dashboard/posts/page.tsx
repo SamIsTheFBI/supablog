@@ -9,7 +9,7 @@ export default async function DashboardPostsPage() {
   const postData = await getPostsByUserId(session.user.id)
   return (
     <>
-      <div className="space-y-4 p-4 max-w-7xl">
+      <div className="space-y-4 p-4 w-full max-w-7xl">
         <div className="space-y-2">
           <div className="flex justify-between">
             <h1 className="text-2xl font-bold">Your Posts: </h1>

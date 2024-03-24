@@ -21,7 +21,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
       <div>404</div>
     )
 
-  const authorName = await getUserById(blogData[0].authorId)
+  const [author] = await getUserById(blogData[0].authorId)
   const blogContent = DOMPurify.sanitize(blogData[0].content)
   const commentData = await getCommentsByPostId(blogData[0].slug)
   return (
@@ -32,7 +32,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
             {blogData[0].title}
           </div>
           <div className="text-muted-foreground text-sm">
-            By {authorName} | {blogData[0].updatedAt.toLocaleString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })} {blogData[0].updatedAt.toString() !== blogData[0].createdAt.toString() && '(updated)'}
+            By {author.name} | {blogData[0].updatedAt.toLocaleString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })} {blogData[0].updatedAt.toString() !== blogData[0].createdAt.toString() && '(updated)'}
           </div>
           {
             (blogData[0].coverImage?.toString() !== '' && blogData[0].coverImage !== null) &&

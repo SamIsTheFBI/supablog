@@ -94,5 +94,5 @@ export async function deletePost(slug: string) {
 
 export async function getUserById(id: string) {
   const author = await db.select().from(users).where(eq(users.id, id))
-  return author[0].name
+  return author
 }
