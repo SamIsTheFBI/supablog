@@ -18,7 +18,7 @@ import { deletePost } from "@/server/actions/blogActions";
 import { Input } from "../ui/input";
 import { useFormState } from "react-dom";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { cn, dateFormatter } from "@/lib/utils";
 
 export default function BlogListItem({ post }: { post: SelectBlogs }) {
   const [state, formAction] = useFormState(handleDeletePost, {
@@ -46,7 +46,7 @@ export default function BlogListItem({ post }: { post: SelectBlogs }) {
             <span className={cn(post.isDraft && 'text-muted-foreground', "max-w-md text-pretty sm:truncate")}>{post.title}</span>
           </Link>
           <span className="text-muted-foreground text-sm max-sm:text-xs">
-            {post.createdAt.toString() === post.updatedAt.toString() && 'Created at ' || 'Last updated at '}{post.updatedAt.toLocaleString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}
+            {post.createdAt.toString() === post.updatedAt.toString() && 'Created at ' || 'Last updated at '}{dateFormatter.format(post.updatedAt)}
           </span>
         </div>
         <div className="inline-flex items-center">
