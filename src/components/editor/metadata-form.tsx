@@ -140,7 +140,7 @@ export default function MetadataForm({ session, blogObj }: MetadataFormProps) {
   const [imageUrl, setImageUrl] = useState(coverImage)
 
   return (
-    <>
+    <div className="sm:min-w-96 flex flex-col rounded-md mt-2 px-4 py-2 max-lg:flex-grow lg:sticky top-14 max-h-main shadow-sm bg-background border">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 flex flex-col justify-between h-full py-2">
           <div className="space-y-3">
@@ -248,6 +248,6 @@ export default function MetadataForm({ session, blogObj }: MetadataFormProps) {
           </div>
         </form>
       </Form>
-    </>
+    </div>
   )
 }

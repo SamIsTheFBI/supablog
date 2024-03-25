@@ -29,11 +29,11 @@ export default async function EditPost({ params }: { params: { slug: string } })
 
   return (
     <main className="mx-auto px-4 bg-secondary">
-      <div className="flex max-lg:flex-wrap-reverse justify-between h-full main-height max-w-7xl mx-auto">
-        <section className="prose dark:prose-invert max-w-3xl px-4 py-2 prose-img:ml-[auto] prose-img:mr-[auto] space-y-2 bg-background dark:bg-background/45 flex-grow rounded-md m-2 mb-0 shadow-md">
+      <div className="flex max-lg:flex-wrap-reverse justify-between h-full main-height max-w-7xl mx-auto max-md:gap-y-4">
+        <section className="sm:px-4">
           <Tiptap session={session} blogObj={blogObj[0]} />
         </section>
-        <aside className="sm:min-w-96 flex flex-col rounded-md mt-2 px-4 py-2 max-lg:flex-grow lg:sticky top-14 max-h-main shadow-sm bg-background border ">
+        <aside>
           <MetadataForm session={session} blogObj={blogObj[0]} />
         </aside>
       </div>

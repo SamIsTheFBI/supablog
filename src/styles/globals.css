@@ -103,4 +103,8 @@ article > div {
   ::selection, .text-selected {
     @apply bg-secondary text-secondary
   }
+
+  .my-ut {
+    @apply ut-button:transition-all ut-button:border ut-button:bg-secondary/55 ut-button:text-sm ut-button:ut-readying:bg-secondary/55 ut-button:ut-uploading:bg-secondary/55 ut-button:text-primary ut-button:hover:bg-secondary
+  }
 }
