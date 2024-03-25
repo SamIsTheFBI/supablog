@@ -1,5 +1,6 @@
 import MetadataForm from "@/components/editor/metadata-form";
 import Tiptap from "@/components/editor/tiptap";
+import Sidebar from "@/components/layout/sidebar";
 import { getPostBySlug } from "@/server/actions/blogActions";
 import { getUserAuth } from "@/server/auth/utils";
 
@@ -29,7 +30,7 @@ export default async function EditPost({ params }: { params: { slug: string } })
 
   return (
     <main className="mx-auto px-4 bg-secondary">
-      <div className="flex max-lg:flex-wrap-reverse justify-between h-full main-height max-w-7xl mx-auto max-md:gap-y-4">
+      <div className="flex max-lg:flex-wrap-reverse justify-center h-full main-height max-w-7xl mx-auto max-md:gap-y-4">
         <section className="sm:px-4">
           <Tiptap session={session} blogObj={blogObj[0]} />
         </section>

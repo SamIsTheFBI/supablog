@@ -45,7 +45,7 @@ export default async function SheetMenu() {
               {session.session?.user
                 &&
                 <div className="border-t pt-4 mb-28">
-                  <Link href="/dashboard">
+                  <Link href="/dashboard/profile">
                     <UserPfpBox />
                   </Link>
                 </div>

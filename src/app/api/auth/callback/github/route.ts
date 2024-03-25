@@ -64,6 +64,7 @@ export async function GET(request: Request): Promise<Response> {
         id: userId,
         name: githubUser.login,
         email: userEmail,
+        avatarUrl: githubUser.avatarUrl
       })
     } catch (e) {
       return new Response(null, {
@@ -100,4 +101,5 @@ interface GitHubUser {
   id: string;
   login: string;
   email?: string;
+  avatarUrl?: string;
 }

@@ -66,16 +66,6 @@ export default async function DashboardPage() {
             </Link>
           </li>
         </ul>
-        <div className="space-y-2">
-          <div className="flex justify-between">
-            <h1 className="text-2xl font-bold">Recent Posts: </h1>
-          </div>
-          <ul className="space-y-2">
-            {postData.map((post) => (
-              <li key={post.id}><BlogListItem post={post} /></li>
-            ))}
-          </ul>
-        </div>
         <SignOutButton />
       </div>
     </>

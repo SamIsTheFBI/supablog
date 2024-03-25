@@ -31,6 +31,7 @@
     "@radix-ui/react-toggle": "^1.0.3",
     "@t3-oss/env-core": "^0.9.2",
     "@tiptap/extension-bubble-menu": "^2.2.4",
+    "@tiptap/extension-character-count": "^2.2.4",
     "@tiptap/extension-code-block-lowlight": "^2.2.4",
     "@tiptap/extension-image": "^2.2.4",
     "@tiptap/extension-link": "^2.2.4",
