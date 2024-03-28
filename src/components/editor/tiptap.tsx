@@ -59,11 +59,11 @@ export default function Tiptap({ session, blogObj }: EditorProps) {
         <BubbleMenuItems editor={editor} />
       </BubbleMenu>
 
-      <div className="sticky top-14 max-w-2xl z-40">
+      <div className="sticky top-16 lg:top-14 max-w-2xl z-40">
         <EditorMenu editor={editor} />
       </div>
-      <div className="mt-4 prose dark:prose-invert max-w-2xl px-4 py-2 prose-img:ml-[auto] prose-img:mr-[auto] space-y-2 bg-background flex-grow rounded-md shadow-md">
-        <article className="px-4 h-full">
+      <div className="mt-4 prose dark:prose-invert max-w-2xl px-4 py-2 prose-img:ml-[auto] prose-img:mr-[auto] space-y-2 bg-background flex-grow rounded-md shadow-md prose-a:text-primary prose-blockquote:border-l-primary">
+        <article className="p-4 h-full">
           <EditorContent editor={editor} />
         </article>
       </div>

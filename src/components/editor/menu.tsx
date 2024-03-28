@@ -37,7 +37,7 @@ export default function EditorMenu({ editor }: { editor: Editor }) {
                 if (event.key === "Enter") {
                   const url = (event.target as HTMLInputElement).value
                   if (url && url !== '')
-                    editor?.chain().focus().setImage({ src: 'url' }).run()
+                    editor?.chain().focus().setImage({ src: url }).run()
                 }
               }}
             />
@@ -76,7 +76,7 @@ export default function EditorMenu({ editor }: { editor: Editor }) {
             .toggleBold()
             .run()
         }
-        className={editor.isActive('bold') ? 'border border-secondary-foreground bg-secondary' : ''}
+        className={editor.isActive('bold') ? 'text-primary bg-secondary' : ''}
       >
         <FaBold />
       </Button>
@@ -90,7 +90,7 @@ export default function EditorMenu({ editor }: { editor: Editor }) {
             .toggleItalic()
             .run()
         }
-        className={editor.isActive('italic') ? 'border border-secondary-foreground bg-secondary' : ''}
+        className={editor.isActive('italic') ? 'text-primary bg-secondary' : ''}
       >
         <FaItalic />
       </Button>
@@ -104,14 +104,14 @@ export default function EditorMenu({ editor }: { editor: Editor }) {
             .toggleStrike()
             .run()
         }
-        className={editor.isActive('strike') ? 'border border-secondary-foreground bg-secondary' : ''}
+        className={editor.isActive('strike') ? 'text-primary bg-secondary' : ''}
       >
         <FaStrikethrough />
       </Button>
       <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().toggleUnderline().run()}
-        className={editor.isActive('underline') ? 'border border-secondary-foreground bg-secondary' : ''}
+        className={editor.isActive('underline') ? 'text-primary bg-secondary' : ''}
       >
         <FaUnderline />
       </Button>
@@ -123,70 +123,70 @@ export default function EditorMenu({ editor }: { editor: Editor }) {
       <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-        className={editor.isActive('heading', { level: 1 }) ? 'border border-secondary-foreground bg-secondary' : ''}
+        className={editor.isActive('heading', { level: 1 }) ? 'text-primary bg-secondary' : ''}
       >
-        h1
+        <span className="font-extrabold">h1</span>
       </Button>
       <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-        className={editor.isActive('heading', { level: 2 }) ? 'border border-secondary-foreground bg-secondary' : ''}
+        className={editor.isActive('heading', { level: 2 }) ? 'text-primary bg-secondary' : ''}
       >
-        h2
+        <span className="font-extrabold">h2</span>
       </Button>
       <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-        className={editor.isActive('heading', { level: 3 }) ? 'border border-secondary-foreground bg-secondary' : ''}
+        className={editor.isActive('heading', { level: 3 }) ? 'text-primary bg-secondary' : ''}
       >
-        h3
+        <span className="font-extrabold">h3</span>
       </Button>
       <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
-        className={editor.isActive('heading', { level: 4 }) ? 'border border-secondary-foreground bg-secondary' : ''}
+        className={editor.isActive('heading', { level: 4 }) ? 'text-primary bg-secondary' : ''}
       >
-        h4
+        <span className="font-extrabold">h4</span>
       </Button>
       <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
-        className={editor.isActive('heading', { level: 5 }) ? 'border border-secondary-foreground bg-secondary' : ''}
+        className={editor.isActive('heading', { level: 5 }) ? 'text-primary bg-secondary' : ''}
       >
-        h5
+        <span className="font-extrabold">h5</span>
       </Button>
       <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
-        className={editor.isActive('heading', { level: 6 }) ? 'border border-secondary-foreground bg-secondary' : ''}
+        className={editor.isActive('heading', { level: 6 }) ? 'text-primary bg-secondary' : ''}
       >
-        h6
+        <span className="font-extrabold">h6</span>
       </Button>
       <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().toggleBulletList().run()}
-        className={editor.isActive('bulletList') ? 'border border-secondary-foreground bg-secondary' : ''}
+        className={editor.isActive('bulletList') ? 'text-primary bg-secondary' : ''}
       >
         <FaListUl />
       </Button>
       <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        className={editor.isActive('orderedList') ? 'border border-secondary-foreground bg-secondary' : ''}
+        className={editor.isActive('orderedList') ? 'text-primary bg-secondary' : ''}
       >
         <FaListOl />
       </Button>
       <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-        className={editor.isActive('codeBlock') ? 'border border-secondary-foreground bg-secondary' : ''}
+        className={editor.isActive('codeBlock') ? 'text-primary bg-secondary' : ''}
       >
         <FaCode />
       </Button>
       <Button type="button"
         variant="ghost"
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
-        className={editor.isActive('blockquote') ? 'border border-secondary-foreground bg-secondary' : ''}
+        className={editor.isActive('blockquote') ? 'text-primary bg-secondary' : ''}
       >
         <FaQuoteLeft />
       </Button>

@@ -27,6 +27,7 @@ import { UploadButton } from "./uploadthing";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { cn, dateFormatter } from "@/lib/utils";
+import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 
 export type MetadataFormProps = {
   session: AuthSession,
@@ -140,114 +141,236 @@ export default function MetadataForm({ session, blogObj }: MetadataFormProps) {
   const [imageUrl, setImageUrl] = useState(coverImage)
 
   return (
-    <div className="sm:min-w-96 flex flex-col rounded-md mt-2 px-4 py-2 max-lg:flex-grow lg:sticky top-14 max-h-main shadow-sm bg-background border">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 flex flex-col justify-between h-full py-2">
-          <div className="space-y-3">
-            {blogObj &&
-              <div className="flex flex-wrap justify-between text-sm">
-                <span>
-                  {blogObj?.updatedAt && (`Last updated on: ${dateFormatter.format(blogObj.updatedAt)}`)}
-                </span>
-                <span>
-                  Status: {(blogObj && blogObj.isDraft) && "Draft" || "Published"}
-                </span>
-              </div>
-            }
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem className="flex items-baseline gap-x-3 justify-between">
-                  <FormLabel>Title</FormLabel>
-                  <div className="w-full space-y-1">
-                    <FormControl>
-                      <Input placeholder="Title of your blog post" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </div>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="slug"
-              render={({ field }) => (
-                <FormItem>
-                  <div className="flex items-baseline gap-x-3 justify-between">
-                    <FormLabel>Slug</FormLabel>
-                    <div className="flex gap-2 w-full max-sm:flex-wrap">
-                      <FormControl>
-                        <Input placeholder="This will show in URL of your blog post" {...field} />
-                      </FormControl>
-                      <Button type="button" onClick={() => slugify(form.getValues('title'))}>Generate Slug</Button>
+    <>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button className="z-10 bottom-4 right-5 fixed shadow-xl lg:hidden">Submit</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            Blog Details
+          </DialogHeader>
+          <div className="lg:min-w-96 flex flex-col rounded-md mt-2 max-lg:flex-grow lg:sticky top-14 max-h-main shadow-sm bg-background">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 flex flex-col justify-between h-full py-2">
+                <div className="space-y-3">
+                  {blogObj &&
+                    <div className="flex flex-wrap justify-between text-sm">
+                      <span>
+                        {blogObj?.updatedAt && (`Last updated on: ${dateFormatter.format(blogObj.updatedAt)}`)}
+                      </span>
+                      <span>
+                        Status: {(blogObj && blogObj.isDraft) && "Draft" || "Published"}
+                      </span>
                     </div>
+                  }
+                  <FormField
+                    control={form.control}
+                    name="title"
+                    render={({ field }) => (
+                      <FormItem className="flex items-baseline gap-x-3 justify-between">
+                        <FormLabel>Title</FormLabel>
+                        <div className="w-full space-y-1">
+                          <FormControl>
+                            <Input placeholder="Title of your blog post" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="slug"
+                    render={({ field }) => (
+                      <FormItem>
+                        <div className="flex items-baseline gap-x-3 justify-between">
+                          <FormLabel>Slug</FormLabel>
+                          <div className="flex gap-2 w-full max-sm:flex-wrap">
+                            <FormControl>
+                              <Input placeholder="This will show in URL of your blog post" {...field} />
+                            </FormControl>
+                            <Button type="button" onClick={() => slugify(form.getValues('title'))}>Generate Slug</Button>
+                          </div>
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem className="flex items-baseline gap-x-3 justify-between">
+                        <FormLabel>Description</FormLabel>
+                        <div className="w-full space-y-1">
+                          <FormControl>
+                            <Textarea placeholder="A brief description of your blog post" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={() => (
+                      <FormItem className="flex items-baseline gap-x-3">
+                        <FormLabel>Cover Image</FormLabel>
+                        <FormControl>
+                          <UploadButton
+                            className="mt-4 ut-button:transition-all ut-button:border ut-button:bg-secondary/55 ut-button:text-sm ut-button:ut-readying:bg-secondary/55 ut-button:text-black dark:ut-button:text-white ut-button:hover:bg-secondary ut-uploading:ut-button:bg-secondary dark:ut-uploading:ut-button:bg-secondary"
+                            endpoint="imageUploader"
+                            onClientUploadComplete={(res) => {
+                              // Do something with the response
+                              setImageUrl(res[0].url)
+                            }}
+                            onUploadError={(error: Error) => {
+                              // Do something with the error.
+                              alert(`ERROR! ${error.message}`);
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className="flex justify-center w-full gap-2">
+                    {imageUrl !== '' &&
+                      <Image
+                        src={imageUrl}
+                        alt="cover image"
+                        height={352}
+                        width={360}
+                        className="aspect-video h-56 rounded-md border object-cover"
+                      />
+                    }
                   </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem className="flex items-baseline gap-x-3 justify-between">
-                  <FormLabel>Description</FormLabel>
-                  <div className="w-full space-y-1">
+                </div>
+                <div className="space-x-2 flex">
+                  <Button disabled={pending} type="submit">
+                    {update && 'Update' || 'Submit'} &amp; Publish
+                  </Button>
+                  <Button variant="secondary" disabled={pending} type="button" onClick={form.handleSubmit(onDraft)}>
+                    Save as draft
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <div className="lg:min-w-96 flex flex-col rounded-md mt-2 px-4 py-2 max-lg:flex-grow lg:sticky top-14 max-h-main shadow-sm bg-background border max-lg:hidden sidebar-height">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 flex flex-col justify-between h-full py-2">
+            <div className="space-y-3">
+              {blogObj &&
+                <div className="flex flex-wrap justify-between text-sm">
+                  <span>
+                    {blogObj?.updatedAt && (`Last updated on: ${dateFormatter.format(blogObj.updatedAt)}`)}
+                  </span>
+                  <span>
+                    Status: {(blogObj && blogObj.isDraft) && "Draft" || "Published"}
+                  </span>
+                </div>
+              }
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem className="flex items-baseline gap-x-3 justify-between">
+                    <FormLabel>Title</FormLabel>
+                    <div className="w-full space-y-1">
+                      <FormControl>
+                        <Input placeholder="Title of your blog post" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </div>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="slug"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex items-baseline gap-x-3 justify-between">
+                      <FormLabel>Slug</FormLabel>
+                      <div className="flex gap-2 w-full max-sm:flex-wrap">
+                        <FormControl>
+                          <Input placeholder="This will show in URL of your blog post" {...field} />
+                        </FormControl>
+                        <Button type="button" onClick={() => slugify(form.getValues('title'))}>Generate Slug</Button>
+                      </div>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem className="flex items-baseline gap-x-3 justify-between">
+                    <FormLabel>Description</FormLabel>
+                    <div className="w-full space-y-1">
+                      <FormControl>
+                        <Textarea placeholder="A brief description of your blog post" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </div>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="description"
+                render={() => (
+                  <FormItem className="flex items-baseline gap-x-3">
+                    <FormLabel>Cover Image</FormLabel>
                     <FormControl>
-                      <Textarea placeholder="A brief description of your blog post" {...field} />
+                      <UploadButton
+                        className="mt-4 ut-button:transition-all ut-button:border ut-button:bg-secondary/55 ut-button:text-sm ut-button:ut-readying:bg-secondary/55 ut-button:text-black dark:ut-button:text-white ut-button:hover:bg-secondary ut-uploading:ut-button:bg-secondary dark:ut-uploading:ut-button:bg-secondary"
+                        endpoint="imageUploader"
+                        onClientUploadComplete={(res) => {
+                          // Do something with the response
+                          setImageUrl(res[0].url)
+                        }}
+                        onUploadError={(error: Error) => {
+                          // Do something with the error.
+                          alert(`ERROR! ${error.message}`);
+                        }}
+                      />
                     </FormControl>
                     <FormMessage />
-                  </div>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={() => (
-                <FormItem className="flex items-baseline gap-x-3">
-                  <FormLabel>Cover Image</FormLabel>
-                  <FormControl>
-                    <UploadButton
-                      className="mt-4 ut-button:transition-all ut-button:border ut-button:bg-secondary/55 ut-button:text-sm ut-button:ut-readying:bg-secondary/55 ut-button:ut-uploading:bg-secondary/55 ut-button:text-primary ut-button:hover:bg-secondary"
-                      endpoint="imageUploader"
-                      onClientUploadComplete={(res) => {
-                        // Do something with the response
-                        setImageUrl(res[0].url)
-                      }}
-                      onUploadError={(error: Error) => {
-                        // Do something with the error.
-                        alert(`ERROR! ${error.message}`);
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="flex justify-center w-full gap-2">
-              {imageUrl !== '' &&
-                <Image
-                  src={imageUrl}
-                  alt="cover image"
-                  height={352}
-                  width={360}
-                  className="aspect-video h-56 rounded-md border object-cover"
-                />
-              }
+                  </FormItem>
+                )}
+              />
+              <div className="flex justify-center w-full gap-2">
+                {imageUrl !== '' &&
+                  <Image
+                    src={imageUrl}
+                    alt="cover image"
+                    height={352}
+                    width={360}
+                    className="aspect-video h-56 rounded-md border object-cover"
+                  />
+                }
+              </div>
             </div>
-          </div>
-          <div className="space-x-2">
-            <Button disabled={pending} type="submit">
-              {update && 'Update' || 'Submit'} &amp; Publish
-            </Button>
-            <Button variant="secondary" disabled={pending} type="button" onClick={form.handleSubmit(onDraft)}>
-              Save as draft
-            </Button>
-          </div>
-        </form>
-      </Form>
-    </div>
+            <div className="space-x-2">
+              <Button disabled={pending} type="submit">
+                {update && 'Update' || 'Submit'} &amp; Publish
+              </Button>
+              <Button variant="secondary" disabled={pending} type="button" onClick={form.handleSubmit(onDraft)}>
+                Save as draft
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
+    </>
   )
 }

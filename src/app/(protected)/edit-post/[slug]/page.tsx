@@ -30,8 +30,8 @@ export default async function EditPost({ params }: { params: { slug: string } })
 
   return (
     <main className="mx-auto px-4 bg-secondary">
-      <div className="flex max-lg:flex-wrap-reverse justify-center h-full main-height max-w-7xl mx-auto max-md:gap-y-4">
-        <section className="sm:px-4">
+      <div className="max-lg:pt-4 md:flex max-lg:flex-wrap-reverse justify-center h-full main-height max-w-7xl mx-auto max-md:gap-y-4">
+        <section className="lg:px-4">
           <Tiptap session={session} blogObj={blogObj[0]} />
         </section>
         <aside>
@@ -41,5 +41,3 @@ export default async function EditPost({ params }: { params: { slug: string } })
     </main>
   )
 }
-
-
