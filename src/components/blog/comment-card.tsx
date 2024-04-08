@@ -11,6 +11,13 @@ import { useFormState } from "react-dom";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { BsThreeDotsVertical } from "react-icons/bs";
+
 export default function CommentCard({
   comment,
   user,
@@ -45,18 +52,35 @@ export default function CommentCard({
     <>
       <li className="space-y-4">
         <div className="bg-secondary/15 p-4 border shadow-sm dark:shadow-primary/15 rounded-md space-y-2">
-          <div className="space-x-2">
-            <span className="font-bold max-sm:text-sm">{user?.name?.split(' ').slice(0, 2).join(' ')}</span>
+          <div className="flex justify-between">
+            <span className="space-x-2">
+              <span className="font-bold max-sm:text-sm">{user?.name?.split(' ').slice(0, 2).join(' ')}</span>
+              {
+                blogAuthorId === user?.id &&
+                <span className="text-xs bg-secondary px-2 py-1 rounded-md border antialiased">Author</span>
+              }
+              <span className="text-muted-foreground text-xs">&bull;</span>
+              <span className="text-muted-foreground max-sm:text-xs text-sm">{comment.createdAt.toLocaleString()}</span>
+              {
+                comment.createdAt.getTime() !== comment.updatedAt.getTime() &&
+                <>
+                  <span className="text-muted-foreground text-xs">&bull;</span>
+                  <span className="text-muted-foreground text-xs">(Edited)</span>
+                </>
+              }
+            </span>
             {
-              blogAuthorId === user?.id &&
-              <span className="text-xs bg-secondary px-2 py-1 rounded-md border antialiased">Author</span>
-            }
-            <span className="text-muted-foreground text-xs">&bull;</span>
-            <span className="text-muted-foreground max-sm:text-xs text-sm">{comment.createdAt.toLocaleString()}</span>
-            <span className="text-muted-foreground text-xs">&bull;</span>
-            {
-              comment.createdAt.getTime() !== comment.updatedAt.getTime() &&
-              <span className="text-muted-foreground text-xs">(Edited)</span>
+              currentUserId === user?.id && !isUpdating &&
+              <Popover>
+                <PopoverTrigger><BsThreeDotsVertical size={14} /></PopoverTrigger>
+                <PopoverContent className="flex flex-col gap-y-2 max-w-32 p-2">
+                  <form action={deleteCommentById} className="grid gap-y-2 items-start w-full">
+                    <input hidden readOnly aria-hidden name="comment_uuid" value={comment.uuid} />
+                    <Button variant="ghost" type="submit" className="justify-start gap-x-4"><FaTrash />Delete</Button>
+                  </form>
+                  <Button variant="ghost" onClick={() => setIsUpdating(true)} className="justify-start gap-x-4"><LuPencil />Edit</Button>
+                </PopoverContent>
+              </Popover>
             }
           </div>
           <p className={cn(isUpdating && 'hidden')}>
@@ -75,19 +99,6 @@ export default function CommentCard({
               <Button type="reset" onClick={() => setIsUpdating(false)}>Cancel</Button>
             </div>
           </form>
-          <div className="text-sm flex w-full gap-x-2">
-            {
-              currentUserId === user?.id &&
-              <form action={deleteCommentById}>
-                <input hidden readOnly aria-hidden name="comment_uuid" value={comment.uuid} />
-                <Button variant="ghost"><FaTrash /></Button>
-              </form>
-            }
-            {
-              currentUserId === user?.id && !isUpdating &&
-              <Button variant="ghost" onClick={() => setIsUpdating(true)}><LuPencil /></Button>
-            }
-          </div>
         </div>
         <div className="pl-6 border-l border-border space-y-2">
           <ul className="space-y-2">
