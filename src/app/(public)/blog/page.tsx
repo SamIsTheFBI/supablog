@@ -51,6 +51,7 @@ export default async function Blog({
   }
   const nextPage = getNextPage()
   const prevPage = getPrevPage()
+  console.log(nextPage)
   return (
     <>
       <main className="space-y-6 p-4 max-w-7xl mx-auto">
@@ -70,7 +71,7 @@ export default async function Blog({
           </ul>
         </div>
         {}
-        <Pagination className={cn(visiblePaginationCnt > pageCnt && "hidden", "mx-auto max-w-2xl")}>
+        <Pagination className={cn("mx-auto max-w-2xl")}>
           <PaginationContent className={cn("flex justify-between items-center w-full", prevPage < 1 && "justify-end", nextPage < 1 && "justify-start")}>
             {prevPage > -1 &&
               <PaginationItem>
