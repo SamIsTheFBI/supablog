@@ -1,7 +1,7 @@
 "use client"
 
 import { SelectBlogs } from "@/server/db/schema/blog";
-import { LuPencil } from "react-icons/lu";
+import { LuCheck, LuEye, LuFileText, LuPencil } from "react-icons/lu";
 import { AiOutlineDelete } from "react-icons/ai";
 import Link from "next/link";
 
@@ -37,21 +37,29 @@ export default function BlogListItem({ post }: { post: SelectBlogs }) {
   }
   return (
     <>
-      <div className="px-4 py-2 border rounded-sm flex justify-between items-center text-wrap gap-2 hover:bg-secondary">
+      <div className={cn("px-4 py-2 border border-border rounded-sm flex justify-between items-center text-wrap gap-2 hover:bg-secondary", post.isApproved && "border-green-400 dark:border-green-400/55")}>
         <div className="inline-flex justify-between items-center flex-grow mr-4 lg:mr-16 max-sm:flex-wrap w-full">
           <Link href={`/edit-post/${post.slug}`} className={`hover:underline group underline-offset-2 inline-flex gap-x-2 items-center ${post.isDraft && `decoration-muted-foreground`}`}>
+            {post.isDraft &&
+              <div className={cn(post.isApproved && "bg-green-400 dark:bg-green-400/55" || "bg-muted", " rounded-md p-1 border border-stone-400 dark:border-border")}><LuFileText /></div>
+              ||
+              <div className={cn(post.isApproved && "bg-green-400 dark:bg-green-400/55" || "bg-muted", " rounded-md p-1 border border-stone-400 dark:border-border")}><LuCheck /></div>
+            }
             <span className="text-muted-foreground text-sm group-hover:flex hidden">
               <LuPencil />
             </span>
-            <span className={cn(post.isDraft && 'text-muted-foreground', "max-w-md text-pretty sm:truncate")}>{post.title}</span>
+            <span className={cn(post.isDraft && 'text-muted-foreground', "max-w-md text-pretty ")}>{post.title}</span>
           </Link>
           <span className="text-muted-foreground text-sm max-sm:text-xs">
             {post.createdAt.toString() === post.updatedAt.toString() && 'Created at ' || 'Last updated at '}{dateFormatter.format(post.updatedAt)}
           </span>
         </div>
         <div className="inline-flex items-center">
-          <Link href={`/edit-post/${post.slug}`} className="p-2 hover:bg-secondary rounded-sm">
-          </Link>
+          {!post.isApproved &&
+            <Link href={`/preview/${post.slug}`} className="p-2 hover:bg-secondary rounded-sm">
+              <LuEye />
+            </Link>
+          }
           <Dialog>
             <DialogTrigger className="p-2 hover:bg-destructive rounded-sm hover:text-destructive-foreground">
               <AiOutlineDelete />

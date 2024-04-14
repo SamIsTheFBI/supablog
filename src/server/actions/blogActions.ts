@@ -1,6 +1,6 @@
 "use server"
 
-import { desc, eq } from "drizzle-orm"
+import { and, desc, eq } from "drizzle-orm"
 import { db } from "../db"
 import { blogs, type InsertBlogs } from "../db/schema/blog"
 import { revalidatePath } from "next/cache"
@@ -45,22 +45,22 @@ export async function getAuthorById(id: string) {
 }
 
 export async function getPostsByOffset(offset: number, limit: number, published: boolean = true) {
-  const data = await db.select().from(blogs).where(eq(blogs.isDraft, !published)).orderBy(desc(blogs.createdAt)).limit(limit).offset(offset)
+  const data = await db.select().from(blogs).where(eq(blogs.isApproved, published)).orderBy(desc(blogs.createdAt)).limit(limit).offset(offset)
   return data
 }
 
 export async function getPublishedPostsCount() {
-  const data = await db.select().from(blogs).where(eq(blogs.isDraft, false))
+  const data = await db.select().from(blogs).where(eq(blogs.isApproved, true))
   return data.length
 }
 
 export async function getPublishedPosts() {
-  const data = await db.select().from(blogs).where(eq(blogs.isDraft, false)).orderBy(desc(blogs.createdAt))
+  const data = await db.select().from(blogs).where(eq(blogs.isApproved, true)).orderBy(desc(blogs.createdAt))
   return data
 }
 
 export async function getRecentPosts(limit: number) {
-  const data = await db.select().from(blogs).where(eq(blogs.isDraft, false)).orderBy(desc(blogs.updatedAt)).limit(limit)
+  const data = await db.select().from(blogs).where(eq(blogs.isApproved, true)).orderBy(desc(blogs.updatedAt)).limit(limit)
   return data
 }
 
@@ -95,4 +95,22 @@ export async function deletePost(slug: string) {
 export async function getUserById(id: string) {
   const author = await db.select().from(users).where(eq(users.id, id))
   return author
+}
+
+export async function getUnapprovedPosts() {
+  const data = await db.select().from(blogs).where(and(eq(blogs.isApproved, false), eq(blogs.isDraft, false))).leftJoin(users, eq(users.id, blogs.authorId)).orderBy(desc(blogs.createdAt))
+  return data
+}
+
+export async function approvePost(slug: string) {
+  try {
+    await db.update(blogs).set({ isApproved: true, createdAt: new Date(), updatedAt: new Date() }).where(eq(blogs.slug, slug))
+  } catch (e) {
+    return genericError
+  }
+
+  // todo: please find out why removing redirect angers eslint in blog-list-item.tsx
+  // you don't understand useFormState i think
+  revalidatePath("/dashboard")
+  redirect("/dashboard")
 }

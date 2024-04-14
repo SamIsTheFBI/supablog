@@ -9,6 +9,7 @@ export const blogs = pgTable("blogs", {
   description: text("description").notNull(),
   content: text("content").notNull(),
   isDraft: boolean("is_draft").notNull(),
+  isApproved: boolean("is_approved").notNull().default(false),
   authorId: text("author_id").notNull().references(() => users.id),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),

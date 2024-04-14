@@ -54,7 +54,7 @@ const SignUpForm = () => {
 
   return (
     <div className="sm:min-w-96 max-w-xl">
-      <Card className="max-sm:border-0 max-sm:shadow-none">
+      <Card className="border border-border max-sm:border-0 max-sm:shadow-none">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl">Create an account</CardTitle>
           <CardDescription>
@@ -69,7 +69,7 @@ const SignUpForm = () => {
             <CardContent className="grid gap-4">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t" />
+                  <span className="w-full border border-border border-t" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
                   <span className="bg-background px-2 text-muted-foreground">
