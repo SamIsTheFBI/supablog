@@ -1,19 +1,9 @@
-import CommentCard from "@/components/blog/comment-card"
-import CommentForm from "@/components/blog/comment-form"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Textarea } from "@/components/ui/textarea"
 import { env } from "@/env"
 import { getPostBySlug, getUserById } from "@/server/actions/blogActions"
-import { getCommentsByPostId } from "@/server/actions/commentActions"
 import { getUserAuth } from "@/server/auth/utils"
-import { BadgeIcon } from "@radix-ui/react-icons"
 import DOMPurify from "isomorphic-dompurify"
 import { Metadata, ResolvingMetadata } from "next"
 import Image from "next/image"
-import Link from "next/link"
-import { BsFacebook, BsLinkedin, BsReddit, BsTwitterX } from "react-icons/bs"
 
 type Props = {
   params: { slug: string };
@@ -38,7 +28,7 @@ export async function generateMetadata(
   const description = post.description || ''
   const authorName = author.name || 'Anonymous'
   const date = post.createdAt || '2022-11-08T12:00:00.000Z'
-  const cover = post.coverImage || `${env.LUCIA_AUTH_URL}/MUNSOClogo.png`
+  const cover = post.coverImage || `${env.LUCIA_AUTH_URL}/next.svg`
 
   const imageUrl = env.LUCIA_AUTH_URL + '/api/og?'
     + 'title=' + encodeURIComponent(title)
@@ -47,12 +37,12 @@ export async function generateMetadata(
     + '&cover=' + cover
 
   const metadata: Metadata = {
-    title: title + ' • MUNSOC NITA',
+    title: title + ' • Supablog',
     description: description,
 
     twitter: {
       card: 'summary_large_image',
-      title: title + ' • MUNSOC NITA',
+      title: title + ' • Supablog',
       description: description,
       images: [
         {
@@ -65,7 +55,7 @@ export async function generateMetadata(
       ],
     },
     openGraph: {
-      title: title + ' • MUNSOC NITA',
+      title: title + ' • Supablog',
       description: description,
       type: 'article',
       locale: 'en-US',
@@ -99,7 +89,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
   return (
     <>
-      <main className="max-w-7xl mx-auto mt-8 sm:mt-24">
+      <main className="max-w-7xl mx-auto mt-2 sm:mt-8">
         <div className="py-2 px-4 space-y-2 mx-auto sm:text-center">
           <div className="text-3xl tracking-tighter sm:text-5xl xl:text-6xl/none font-bold">
             {blogData[0].title}

@@ -1,17 +1,85 @@
 import CommentCard from "@/components/blog/comment-card"
 import CommentForm from "@/components/blog/comment-form"
 import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { getPostBySlug, getUserById } from "@/server/actions/blogActions"
-import { getCommentsByPostId, getRepliesByParentId } from "@/server/actions/commentActions"
+import { getCommentsByPostId } from "@/server/actions/commentActions"
 import { getUserAuth } from "@/server/auth/utils"
-import { BadgeIcon } from "@radix-ui/react-icons"
 import DOMPurify from "isomorphic-dompurify"
 import Image from "next/image"
 import Link from "next/link"
 import { BsFacebook, BsLinkedin, BsReddit, BsTwitterX } from "react-icons/bs"
-import { LuFacebook, LuTwitter, LuX } from "react-icons/lu"
+import { Metadata, ResolvingMetadata } from "next"
+import { env } from "@/env"
+
+type Props = {
+  params: { slug: string };
+  searchParams: Record<string, string | string[] | undefined>;
+};
+
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const [post] = await getPostBySlug(params.slug)
+  const [author] = await getUserById(post.authorId)
+
+  if (!author || !post) {
+    const boringMetadata = await parent
+    return boringMetadata as Metadata
+  }
+
+  const postUrl = `${env.LUCIA_AUTH_URL}/blog/${post.slug}`
+
+  const title = post.title || 'No Title'
+  const description = post.description || ''
+  const authorName = author.name || 'Anonymous'
+  const date = post.createdAt || '2022-11-08T12:00:00.000Z'
+  const cover = post.coverImage || `${env.LUCIA_AUTH_URL}/next.svg`
+
+  const imageUrl = env.LUCIA_AUTH_URL + '/api/og?'
+    + 'title=' + encodeURIComponent(title)
+    + '&author=' + encodeURIComponent(authorName)
+    + '&date=' + encodeURIComponent(date.toJSON())
+    + '&cover=' + cover
+
+  const metadata: Metadata = {
+    title: title + ' • Supablog',
+    description: description,
+
+    twitter: {
+      card: 'summary_large_image',
+      title: title + ' • Supablog',
+      description: description,
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 628,
+          type: 'image/png',
+          alt: '',
+        }
+      ],
+    },
+    openGraph: {
+      title: title + ' • Supablog',
+      description: description,
+      type: 'article',
+      locale: 'en-US',
+      url: postUrl,
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 628,
+          type: 'image/png',
+          alt: '',
+        }
+      ],
+    },
+  }
+
+  return metadata
+}
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const blogData = await getPostBySlug(params.slug)
