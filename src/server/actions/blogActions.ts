@@ -74,6 +74,11 @@ export async function getPostsByUserId(authorId: string) {
   return data;
 }
 
+export async function getNumberOfPostsByUserId(authorId: string) {
+  const data = await db.select().from(blogs).where(eq(blogs.authorId, authorId)).orderBy(desc(blogs.updatedAt))
+  return data.length;
+}
+
 export async function getPostBySlug(slug: string) {
   const data = await db.select().from(blogs).where(eq(blogs.slug, slug))
   return data

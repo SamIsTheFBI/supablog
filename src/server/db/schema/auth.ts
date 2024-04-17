@@ -6,7 +6,7 @@ export const users = pgTable("user", {
   email: text("email").notNull().unique(),
   hashedPassword: text("hashed_password"),
   name: text("name"),
-  isAuthor: boolean("is_author").notNull().default(false),
+  isAuthor: boolean("is_author").notNull().default(true),
   isAdmin: boolean("is_admin").notNull().default(false),
   avatarUrl: text("avatar_url"),
   authMethods: text("auth_methods").array(),

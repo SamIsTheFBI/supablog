@@ -15,7 +15,7 @@ export default async function UserPfpBox() {
           <span className="inline-block font-bold">{userData.name !== null && userData.name || ''}</span>
           <span className="inline-block text-xs text-muted-foreground w-full truncate">{session.user.email}</span>
         </div>
-        <div className="size-16 min-w-16 rounded-full inline-flex bg-secondary items-center justify-center text-muted-foreground overflow-clip">
+        <div className="size-16 min-w-16 rounded-full border border-border inline-flex bg-secondary items-center justify-center text-muted-foreground overflow-clip">
           {userData.avatarUrl
             &&
             <Image

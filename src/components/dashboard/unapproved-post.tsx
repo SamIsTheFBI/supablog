@@ -46,7 +46,7 @@ export default function UnapprovedBlogItem({ post, author }: { post: SelectBlogs
               <span className="text-muted-foreground text-sm group-hover:flex hidden">
                 <LuEye />
               </span>
-              <span className={cn(post.isDraft && 'text-muted-foreground', "max-w-md text-pretty")}>{post.title}</span>
+              <span className={cn(post.isDraft && 'text-muted-foreground', "max-w-md text-pretty font-bold")}>{post.title}</span>
             </Link>
             <span className="text-muted-foreground text-sm max-sm:text-xs">
               {post.createdAt.toString() === post.updatedAt.toString() && 'Created at ' || 'Last updated at '}{dateFormatter.format(post.updatedAt)}
@@ -80,7 +80,7 @@ export default function UnapprovedBlogItem({ post, author }: { post: SelectBlogs
             </Dialog>
           </div>
         </div>
-        {author.name}
+        <span className="text-sm">{author.name}</span>
       </div>
     </>
   )
