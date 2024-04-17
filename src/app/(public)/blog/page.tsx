@@ -47,7 +47,10 @@ export default async function Blog({
       return -1
     }
 
-    return 2
+    if (pageCnt > 1)
+      return 2
+
+    return -1
   }
   const nextPage = getNextPage()
   const prevPage = getPrevPage()
